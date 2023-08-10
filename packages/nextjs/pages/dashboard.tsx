@@ -79,7 +79,13 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      {isOpen && <ConfirmWalletModal onClose={() => setIsOpen(false)} message="Creating wallet" />}
+      {isOpen && (
+        <ConfirmWalletModal
+          onClose={() => setIsOpen(false)}
+          message="Confirm adding"
+          details="You are about to add an nft to be a wallet"
+        />
+      )}
     </div>
   );
 };
