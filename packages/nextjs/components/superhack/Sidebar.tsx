@@ -28,7 +28,7 @@ const Sidebar = () => {
     },
   ];
   return (
-    <div className="pl-3 md:pl-6 bg-[#1F1E27] w-fit sm:min-w-[220px] max-w-[306px] h-full">
+    <div className="pl-3 md:pl-6 bg-[#1F1E27] w-fit sm:min-w-[220px] lg:min-w-[250px] max-w-[306px] h-full">
       <div className="mt-7">Logo</div>
 
       <ul className="mt-10 ">

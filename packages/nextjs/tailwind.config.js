@@ -90,6 +90,10 @@ module.exports = {
   theme: {
     // Extend Tailwind classes (e.g. font-bai-jamjuree, animate-grow)
     extend: {
+      colors: {
+        "super-dark": "#1F1E27",
+        "super-gradient": "linear-gradient(180deg, #ACE019 0%, #D017C9 100%)",
+      },
       backgroundImage: {
         active: "linear-gradient(270deg, #2D314D 0%, rgba(45, 49, 77, 0) 106.25%)",
       },
