@@ -1,10 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap");
+
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
 :root,
 [data-theme] {
-  background: hsl(var(--b2));
+  background: #191b20;
 }
 
 body {
@@ -17,10 +19,12 @@ h3,
 h4 {
   margin-bottom: 0.5rem;
   line-height: 1;
+  font-family: "Poppins", sans-serif;
 }
 
 p {
-  margin: 1rem 0;
+  font-family: "Raleway", sans-serif;
+  line-height: 1.5;
 }
 
 .btn {
@@ -29,4 +33,18 @@ p {
 
 .btn.btn-ghost {
   @apply shadow-none;
+}
+
+.gradient-text {
+  background: var(--txt-gradient, linear-gradient(180deg, #c4ff04 0%, #f0e 100%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.default-text {
+  background: var(--txt-gradient, linear-gradient(180deg, #fff 0%, #fff 100%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
