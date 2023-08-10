@@ -48,3 +48,24 @@ p {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+.pagehoc__container {
+  display: grid;
+  grid-template-columns: fit-content(100%) 1fr;
+}
+
+.dashboard__container {
+  container-type: inline-size;
+}
+.dashboard__container-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 30px;
+}
+
+@container (max-width: 1000px) {
+  .dashboard__container-content {
+    grid-template-columns: 1fr;
+  }
+}
