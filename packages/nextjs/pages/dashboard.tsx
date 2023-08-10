@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import Blockies from "react-blockies";
 import { BiPlus } from "react-icons/bi";
 import { useAccount } from "wagmi";
 import PageHOC from "~~/components/superhack/PageHOC";
+import ConfirmWalletModal from "~~/components/superhack/modals/ConfirmWalletModal";
 
 const Dashboard = () => {
   const { address } = useAccount();
+  const [isOpen, setIsOpen] = useState(false);
   const displayAddress = address?.slice(0, 5) + "..." + address?.slice(-4);
   return (
     <div className="dashboard__container mt-10">
@@ -43,7 +45,10 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div className="bg-super-dark p-8 grid min-h-[256px] rounded justify-center items-center ">
+        <div
+          onClick={() => setIsOpen(true)}
+          className="bg-super-dark p-8 grid min-h-[256px] cursor-pointer rounded justify-center items-center "
+        >
           <div className=" grid gap-3">
             <p className="grid justify-center ">
               {" "}
@@ -74,6 +79,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      {isOpen && <ConfirmWalletModal onClose={() => setIsOpen(false)} message="Creating wallet" />}
     </div>
   );
 };
