@@ -1,8 +1,11 @@
 import React from "react";
+import Blockies from "react-blockies";
 import { BiPlus } from "react-icons/bi";
+import { useAccount } from "wagmi";
 import PageHOC from "~~/components/superhack/PageHOC";
 
 const Dashboard = () => {
+  const { address } = useAccount();
   return (
     <div className="dashboard__container mt-10">
       <div className=" dashboard__container-content ">
@@ -11,7 +14,12 @@ const Dashboard = () => {
           <div className="mt-8 px-3">
             <div className="grid grid-flow-col justify-start gap-4 mb-6">
               <div>
-                <img src="/images/eth.png" alt="user image" />
+                <Blockies
+                  className="mx-auto rounded-xl"
+                  size={18}
+                  seed={address ? address.toLowerCase() : "0x0000000000"}
+                  scale={3}
+                />
               </div>
               <div className="grid justify-between">
                 <p>Address</p>

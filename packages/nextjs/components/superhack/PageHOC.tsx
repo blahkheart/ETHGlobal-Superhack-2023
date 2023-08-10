@@ -14,7 +14,7 @@ const PageHOC = (Component: React.ComponentType<ComponentProps>) => {
         <Sidebar />
       </div>
 
-      <div className="w-full px-16">
+      <div className="w-full px-8 sm:px-16">
         <Navbar />
         <Component {...props} />
       </div>
