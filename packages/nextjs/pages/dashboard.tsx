@@ -6,6 +6,7 @@ import PageHOC from "~~/components/superhack/PageHOC";
 
 const Dashboard = () => {
   const { address } = useAccount();
+  const displayAddress = address?.slice(0, 5) + "..." + address?.slice(-4);
   return (
     <div className="dashboard__container mt-10">
       <div className=" dashboard__container-content ">
@@ -23,7 +24,11 @@ const Dashboard = () => {
               </div>
               <div className="grid justify-between">
                 <p>Address</p>
-                <p className="text-[2.2 rem]">0x0000000 ... 000000</p>
+                {address ? (
+                  <p className="text-[2.2 rem]">{displayAddress}</p>
+                ) : (
+                  <p className="text-[2.2 rem]">0x000..000</p>
+                )}
               </div>
             </div>
             <div className="grid gap-2 items-center justify-between grid-flow-col">
