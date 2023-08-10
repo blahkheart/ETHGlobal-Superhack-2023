@@ -7,8 +7,14 @@ import ConfirmWalletModal from "~~/components/superhack/modals/ConfirmWalletModa
 
 const Dashboard = () => {
   const { address } = useAccount();
+  const [activeTab, setActiveTab] = useState("my tokens");
   const [isOpen, setIsOpen] = useState(false);
   const displayAddress = address?.slice(0, 5) + "..." + address?.slice(-4);
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+  };
+
   return (
     <div className="dashboard__container mt-10">
       <div className=" dashboard__container-content ">
@@ -61,21 +67,38 @@ const Dashboard = () => {
       <div>
         <div className="mt-8 rounded bg-super-dark ">
           <div className="grid sm:grid-cols-2 ">
-            <div className="text-center py-8 border-b-[3px] border-super-gradient">
+            <button
+              className={`text-center py-8 border-b-[3px]  ${
+                activeTab === "my tokens" ? "border-b-[3px] border-super-gradient" : "border-[#ffffff90]"
+              }`}
+              onClick={() => handleTabChange("my tokens")}
+            >
               <p className="text-[1.2rem] md:text-[1.8rem]">My Tokens</p>
-            </div>
-            <div className="text-center py-8 border-b-[3px] border-gray-600">
+            </button>
+            <button
+              className={`text-center py-8 border-b-[3px]  ${
+                activeTab === "all tokens" ? "border-b-[3px] border-super-gradient" : "border-[#ffffff90]"
+              }`}
+              onClick={() => handleTabChange("all tokens")}
+            >
               <p className="md:text-[1.8rem]">All Tokens</p>
-            </div>
+            </button>
           </div>
-          <div className="grid justify-center  items-center min-h-[485px]">
-            <div className="grid gap-8 text-center justify-center">
-              <p className="text-[1.2rem] md:text-[1.8rem]">You don’t have any funds on this account</p>
-              <button className="px-12 py-5 border-[1px] border-super-gradient rounded-2xl bg-black w-fit mx-auto">
-                {" "}
-                Deposit
-              </button>
-            </div>
+
+          <div className="min-h-[485px]">
+            {activeTab === "my tokens" ? (
+              <div className="grid justify-center  items-center  min-h-[480px] ">
+                <div className="grid gap-8 text-center justify-center">
+                  <p className="text-[1.2rem] md:text-[1.8rem]">You don’t have any funds on this account</p>
+                  <button className="px-12 py-5 border-[1px] border-super-gradient rounded-2xl bg-black w-fit mx-auto">
+                    {" "}
+                    Deposit
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center min-h-[480px]">Ho</div>
+            )}
           </div>
         </div>
       </div>
