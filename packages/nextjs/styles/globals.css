@@ -67,7 +67,7 @@ p {
   gap: 30px;
 }
 
-@container dashboard (max-width: 1000px) {
+@container dashboard (max-width: 850px) {
   .dashboard__container-content {
     grid-template-columns: 1fr;
   }

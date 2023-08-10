@@ -62,15 +62,15 @@ const Dashboard = () => {
         <div className="mt-8 rounded bg-super-dark ">
           <div className="grid sm:grid-cols-2 ">
             <div className="text-center py-8 border-b-[3px] border-super-gradient">
-              <p className="text-[1.8rem]">My Tokens</p>
+              <p className="text-[1.2rem] md:text-[1.8rem]">My Tokens</p>
             </div>
             <div className="text-center py-8 border-b-[3px] border-gray-600">
-              <p className="text-[1.8rem]">All Tokens</p>
+              <p className="md:text-[1.8rem]">All Tokens</p>
             </div>
           </div>
           <div className="grid justify-center  items-center min-h-[485px]">
-            <div className="grid gap-8 justify-center">
-              <p className="text-[1.8rem]">You don’t have any funds on this account</p>
+            <div className="grid gap-8 text-center justify-center">
+              <p className="text-[1.2rem] md:text-[1.8rem]">You don’t have any funds on this account</p>
               <button className="px-12 py-5 border-[1px] border-super-gradient rounded-2xl bg-black w-fit mx-auto">
                 {" "}
                 Deposit
