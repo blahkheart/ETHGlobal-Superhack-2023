@@ -4,7 +4,7 @@ import PageHOC from "~~/components/superhack/PageHOC";
 
 const Dashboard = () => {
   return (
-    <div className="dashboard__container m-10">
+    <div className="dashboard__container mt-10">
       <div className=" dashboard__container-content ">
         <div className="bg-super-dark p-8 min-h-[246px] rounded">
           <p className="text-xl">Accout 1</p>
