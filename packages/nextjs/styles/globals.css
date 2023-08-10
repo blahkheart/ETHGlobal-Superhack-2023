@@ -48,3 +48,8 @@ p {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+.pagehoc__container {
+  display: grid;
+  grid-template-columns: fit-content(100%) 1fr;
+}
