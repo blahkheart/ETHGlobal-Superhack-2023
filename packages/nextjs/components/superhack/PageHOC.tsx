@@ -1,4 +1,5 @@
 import React from "react";
+import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
 // Define the type for the props that the wrapped component will receive
@@ -13,7 +14,8 @@ const PageHOC = (Component: React.ComponentType<ComponentProps>) => {
         <Sidebar />
       </div>
 
-      <div className="w-full">
+      <div className="w-full px-8 lg:px-16">
+        <Navbar />
         <Component {...props} />
       </div>
     </div>

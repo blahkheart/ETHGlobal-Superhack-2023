@@ -51,11 +51,14 @@ p {
 
 .pagehoc__container {
   display: grid;
+
+  min-height: 90vh;
   grid-template-columns: fit-content(100%) 1fr;
 }
 
 .dashboard__container {
   container-type: inline-size;
+  container-name: dashboard;
 }
 .dashboard__container-content {
   display: grid;
@@ -64,8 +67,22 @@ p {
   gap: 30px;
 }
 
-@container (max-width: 1000px) {
+@container dashboard (max-width: 850px) {
   .dashboard__container-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+.deposit__container {
+  container-type: inline-size;
+  container-name: deposit;
+}
+.deposit__container-content {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@container deposit (max-width: 900px) {
+  .deposit__container-content {
     grid-template-columns: 1fr;
   }
 }
