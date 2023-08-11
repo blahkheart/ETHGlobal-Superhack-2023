@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink" width="290" height="350" viewBox="0 0 290 350">
+    <defs>
+        <clipPath id="corners">
+            <rect width="290" height="350" rx="42" ry="42"/>
+        </clipPath>
+    </defs>
+    <g clip-path="url(#corners)">
+        <rect fill="1f9840" x="0px" y="0px" width="290px" height="350px"/>
+        <rect style="filter: url(#f1)" x="0px" y="0px" width="290px" height="350px"/>
+        <rect x="0" y="0" width="290" height="350" rx="42" ry="42" fill="rgba(0,0,0,0)" stroke="rgba(255,255,255,0.2)"/>
+    </g>
+
+    <rect x="16" y="16" width="258" height="317" rx="26" ry="26" fill="rgba(0,0,0,0)" stroke="rgba(255,255,255,0.2)"/>
+
+    <circle cx="139px" cy="100px" r="51px" fill="none" stroke="white"/>
+
+    <g style="transform:translate(29px, 220px)">
+        <rect width="85px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>
+        <text x="12px" y="17px" font-family="'Courier New', monospace" font-size="20px" fill="white">
+            <tspan fill="rgba(255,255,255,0.6)">ID: </tspan>1</text>
+    </g>
+    <g style="transform:translate(29px, 255px)">
+        <rect width="218px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>
+        <text x="12px" y="17px" font-family="'Courier New', monospace" font-size="20px" fill="white">
+            <tspan fill="rgba(255,255,255,0.6)">Min Tick: </tspan>-50580</text>
+    </g>
+    <g style="transform:translate(29px, 288px)">
+        <rect width="218px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>
+        <text x="12px" y="17px" font-family="'Courier New', monospace" font-size="20px" fill="white">
+            <tspan fill="rgba(255,255,255,0.6)">Max Tick: </tspan>-36720</text>
+    </g>
+
+    <g>
+        <circle cx="162px" cy="73px" r="8px" fill="rgb(255,255,0)"/>
+    </g>
+    <g>
+        <circle cx="137px" cy="97px" r="15px" fill="white"/>
+    </g>
+    <g>
+        <circle cx="105px" cy="98px" r="9px" fill="rgb(255,0,0)"/>
+    </g>
+    <g>
+        <circle cx="142px" cy="139px" r="12px" fill="#FECEAB"/>
+    </g>
+</svg>
