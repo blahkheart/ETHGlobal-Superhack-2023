@@ -7,8 +7,6 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/interfaces/IERC1271.sol";
 import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
-import "@openzeppelin/contracts/utils/introspection/ERC165Checker.sol";
-import "@openzeppelin/contracts/utils/StorageSlot.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
@@ -18,10 +16,10 @@ import "./interfaces/IERC6551Executable.sol";
 import "./lib/ERC6551AccountLib.sol";
 
 /**
- * @title ERC6551AccountUpgradeable
- * @notice A lightweight smart contract wallet implementation that can be used by ERC6551AccountProxy
+ * @title ERC6551Account
+ * @notice A lightweight smart contract wallet implementation of ERC6551Account
  */
-contract ERC6551AccountUpgradeable is
+contract ERC6551Account is
     IERC165,
     IERC721Receiver,
     IERC1155Receiver,
@@ -29,13 +27,6 @@ contract ERC6551AccountUpgradeable is
     IERC6551Executable,
     IERC1271
 {
-    /**
-     * @dev Storage slot with the address of the current implementation.
-     * This is the keccak-256 hash of "eip1967.proxy.implementation" subtracted by 1, and is
-     * validated in the constructor.
-     */
-    bytes32 internal constant _IMPLEMENTATION_SLOT =
-        0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
 
     uint256 public state;
 
@@ -58,16 +49,6 @@ contract ERC6551AccountUpgradeable is
         (success, _result) = _target.call{value: _value}(_data);
         require(success, string(_result));
         return _result;
-    }
-
-    /**
-     * @dev Upgrades the implementation.  Only the token owner can call this.
-     */
-    function upgrade(address implementation_) external {
-        require(_isValidSigner(msg.sender), "Caller is not owner");
-        require(implementation_ != address(0), "Invalid implementation address");
-        ++state;
-        StorageSlot.getAddressSlot(_IMPLEMENTATION_SLOT).value = implementation_;
     }
 
     function isValidSignature(bytes32 hash, bytes memory signature)

@@ -5,8 +5,8 @@ pragma abicoder v2;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 import 'base64-sol/base64.sol';
-import "./lib/ToColor.sol";
-import "./lib/TruncateAddress.sol";
+import "./ToColor.sol";
+import "./TruncateAddress.sol";
 
 /// @notice Helper to generate SVGs
 library NFTDescriptor {
@@ -16,13 +16,13 @@ library NFTDescriptor {
     using TruncateAddress for string;
 
     struct SVGParams {
-        address implementation;
         uint256 chainId;
         uint256 tokenId;
         bytes3 color_1;
         bytes3 color_2;
         bytes3 color_3;
         bytes3 color_4;
+        address implementation;
         address mainAccount;
         address owner;
     }
