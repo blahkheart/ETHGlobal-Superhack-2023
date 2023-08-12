@@ -8,7 +8,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
   const targetNetwork = getTargetNetwork();
 
   return (
-    <div className="flex justify-center ">
+    <div className="overflow-x-auto justify-center ">
       <table className="table table-zebra  w-full bg-super-dark shadow-lg">
         <thead>
           <tr>
