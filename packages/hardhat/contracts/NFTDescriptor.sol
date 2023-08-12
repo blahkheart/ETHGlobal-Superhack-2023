@@ -6,20 +6,24 @@ pragma abicoder v2;
 import "@openzeppelin/contracts/utils/Strings.sol";
 import 'base64-sol/base64.sol';
 import "./lib/ToColor.sol";
+import "./lib/TruncateAddress.sol";
 
 /// @notice Helper to generate SVGs
 library NFTDescriptor {
     using Strings for uint256;
     using Strings for uint160;
     using ToColor for bytes3;
+    using TruncateAddress for string;
 
     struct SVGParams {
+        address implementation;
+        uint256 chainId;
         uint256 tokenId;
         bytes3 color_1;
         bytes3 color_2;
         bytes3 color_3;
         bytes3 color_4;
-        address primaryAccount;
+        address mainAccount;
         address owner;
     }
 
@@ -116,7 +120,7 @@ library NFTDescriptor {
         );
     }
 
-     function generateSVGID(uint256 _tokenId) external pure returns (string memory svg) {
+    function generateSVGID(uint256 _tokenId) private pure returns (string memory svg) {
         svg = string(
             abi.encodePacked(
                 '<g id="Id-text" style="transform:translate(29px, 220px)">',
@@ -125,14 +129,15 @@ library NFTDescriptor {
                 "'Courier New', monospace",
                 '" font-size="20px" fill="white">',
                 '<tspan fill="rgba(255,255,255,0.6)">ID: </tspan>',
-                unicode' • ',
+                unicode'💎',
                 _tokenId.toString(),
                 '</text></g>'
             )
         );
     }
 
-         function generateSVGMainAccount(address _accountAddress) external pure returns (string memory svg) {
+    function generateSVGMainAccount(address _account) private pure returns (string memory svg) {
+        string memory _accountAddress = uint160(_account).toHexString(20);
         svg = string(
             abi.encodePacked(
                 '<g id="account-text" style="transform:translate(29px, 255px)">',
@@ -140,59 +145,87 @@ library NFTDescriptor {
                 '<text x="12px" y="17px" font-family="',
                 "'Courier New', monospace",
                 '" font-size="13px" fill="white">',
-                '<tspan fill="rgba(255,255,255,0.6)">Main Account: </tspan>',
-                 _accountAddress,
+                '<tspan fill="rgba(255,255,255,0.6)">Main Acc',
+                unicode'💼',
+                ': </tspan>',
+                 _accountAddress.truncateAddress(),
                 '</text></g>'
             )
         );
     }
-//     function generateSVGImage(SVGParams memory _svgParams) internal pure returns (string memory svg) {
-//         return string(
-//             abi.encodePacked(
-//                 generateSVGHead(),
-//                 Eye.loogieEye_1(),
-//                 Head.loogieHead(_svgParams.color, _svgParams.chubbiness),
-//                 Eye.loogieEye_2(),
-//                 Mouth.loogieMouth(_svgParams.chubbiness, _svgParams.mouth),
-//                 "</svg>"
-//             )
-//         );
-//   }
 
-    /// @dev generate Json Metadata description
-    // function generateDescription(SVGParams memory params) internal pure returns (string memory) {
-    //     return
-    //         string(
-    //             abi.encodePacked(
-    //                 "This Loogie is at level #",
-    //                 params.level.toString(),
-    //                 " with color #",
-    //                 params.color.toColor(),
-    //                 " and chubbiness ",
-    //                 params.chubbiness.toString()
-    //             )
-    //         );
-    // }
+    function generateSVGOwner(address _owner) private pure returns (string memory svg) {
+        string memory _ownerAddress =uint160( _owner).toHexString(20);
+        svg = string(
+            abi.encodePacked(
+                '<g id="owner-text" style="transform:translate(29px, 288px)">',
+                '<rect width="218px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>',
+                '<text x="12px" y="17px" font-family="',
+                "'Courier New', monospace",
+                '" font-size="13px" fill="white">',
+                '<tspan fill="rgba(255,255,255,0.6)">Owner',
+                unicode'🤖',
+                ': </tspan>',
+                 _ownerAddress.truncateAddress(),
+                '</text></g>'
+            )
+        );
+    }
+
+    function generateSVGImage(SVGParams memory _svgParams) internal pure returns (string memory svg) {
+        return string(
+            abi.encodePacked(
+                generateSVGHead(),
+                generateSVGDef(),
+                generateSVGBackground(),
+                generateSVGInnerBorder(),
+                generateSVGCircle(),
+                generateSVGInnerCircle_1(_svgParams.color_1),
+                generateSVGInnerCircle_2(_svgParams.color_2),
+                generateSVGInnerCircle_3(_svgParams.color_3),
+                generateSVGInnerCircle_4(_svgParams.color_4),
+                generateSVGID(_svgParams.tokenId),
+                generateSVGMainAccount(_svgParams.mainAccount),
+                generateSVGOwner(_svgParams.owner),
+                "</svg>"
+            )
+        );
+  }
+
+    // @dev generate Json Metadata description
+    function generateDescription(SVGParams memory params) internal pure returns (string memory) {
+        return
+            string(
+                abi.encodePacked(
+                    "This NFT has ID #",
+                    params.tokenId.toString(),
+                    " and is owned by ",
+                    unicode"🤖",
+                    uint160(params.owner).toHexString(20),
+                    "\\nNBA NFT is an experiment",
+                    unicode"🧪",
+                    " at combining digital ownership with self-governing capabilities"
+                )
+            );
+    }
 
     /// @dev generate Json Metadata attributes
-    // function generateAttributes(SVGParams memory _svgParams) internal pure returns (string memory) {
-    //     return
-    //         string(
-    //             abi.encodePacked(
-    //                 "[",
-    //                 getJsonAttribute("Color", _svgParams.color.toColor(), false),
-    //                 getJsonAttribute("Level", _svgParams.level.toString(), false),
-    //                 abi.encodePacked(
-    //                     getJsonAttribute("Chubbiness", _svgParams.chubbiness.toString(), false),
-    //                     getJsonAttribute("Mouth", _svgParams.mouth.toString(), false),
-    //                     getJsonAttribute("Owner", uint160(_svgParams.owner).toHexString(20), true),
-    //                     "]"
-    //                 )
+    function generateAttributes(SVGParams memory _svgParams) internal pure returns (string memory) {
+        return
+            string(
+                abi.encodePacked(
+                    "[",
+                    getJsonAttribute("Chain ID", _svgParams.chainId.toString(), false),
+                    getJsonAttribute("Implementation",uint160(_svgParams.implementation).toHexString(20), false),
+                    abi.encodePacked(
+                        getJsonAttribute("Main Account", uint160(_svgParams.mainAccount).toHexString(20), false),
+                        getJsonAttribute("Owner", uint160(_svgParams.owner).toHexString(20), true),
+                        "]"
+                    )
                     
-    //             )
-    //         );
-    // }
-  
+                )
+            );
+    }
 
     /// @dev Get the json attribute as
     ///    {

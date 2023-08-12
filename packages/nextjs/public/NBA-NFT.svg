@@ -34,17 +34,22 @@
     <g style="transform:translate(29px, 220px)">
         <rect width="85px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>
         <text x="12px" y="17px" font-family="'Courier New', monospace" font-size="20px" fill="white">
-            <tspan fill="rgba(255,255,255,0.6)">ID: </tspan>1</text>
+            <tspan fill="rgba(255,255,255,0.6)">ID: </tspan>💎1</text>
     </g>
     <g style="transform:translate(29px, 255px)">
         <rect width="218px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>
         <text x="12px" y="17px" font-family="'Courier New', monospace" font-size="13px" fill="white">
-            <tspan fill="rgba(255,255,255,0.6)">Main Account: </tspan>0xd91...9138</text>
+            <tspan fill="rgba(255,255,255,0.6)">Main Acc💼: </tspan>0xd91...9138</text>
     </g>
-    <g style="transform:translate(29px, 288px)">
+    <!-- <g style="transform:translate(29px, 288px)">
         <rect width="218px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>
         <text x="12px" y="17px" font-family="'Courier New', monospace" font-size="13px" fill="white">
-            <tspan fill="rgba(255,255,255,0.6)">Owner: </tspan>0xf8e...fBe8</text>
+            <tspan fill="rgba(255,255,255,0.6)">Owner🤖: </tspan>0xf8e...fBe8</text>
+    </g> -->
+    <g id="owner-text" style="transform:translate(29px, 288px)">
+        <rect width="218px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>
+        <text x="12px" y="17px" font-family="'Courier New', monospace" font-size="13px" fill="white">
+            <tspan fill="rgba(255,255,255,0.6)">Owner🤖: </tspan>0xf8e...fBe8</text>
     </g>
   
 </svg>
