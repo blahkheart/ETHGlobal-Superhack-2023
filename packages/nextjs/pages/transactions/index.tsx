@@ -4,6 +4,7 @@ import { hardhat } from "wagmi/chains";
 import { PaginationButton } from "~~/components/blockexplorer/PaginationButton";
 import { SearchBar } from "~~/components/blockexplorer/SearchBar";
 import { TransactionsTable } from "~~/components/blockexplorer/TransactionsTable";
+import PageHOC from "~~/components/superhack/PageHOC";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 
@@ -49,12 +50,14 @@ const Blockexplorer: NextPage = () => {
   }, [error]);
 
   return (
-    <div className="container mx-auto my-10">
+    <div className="container mx-auto ">
       <SearchBar />
-      <TransactionsTable blocks={blocks} transactionReceipts={transactionReceipts} isLoading={isLoading} />
-      <PaginationButton currentPage={currentPage} totalItems={Number(totalBlocks)} setCurrentPage={setCurrentPage} />
+      <div className="">
+        <TransactionsTable blocks={blocks} transactionReceipts={transactionReceipts} isLoading={isLoading} />
+        <PaginationButton currentPage={currentPage} totalItems={Number(totalBlocks)} setCurrentPage={setCurrentPage} />
+      </div>
     </div>
   );
 };
 
-export default Blockexplorer;
+export default PageHOC(Blockexplorer);

@@ -8,8 +8,8 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
   const targetNetwork = getTargetNetwork();
 
   return (
-    <div className="flex justify-center">
-      <table className="table table-zebra w-full shadow-lg">
+    <div className="flex justify-center ">
+      <table className="table table-zebra  w-full bg-super-dark shadow-lg">
         <thead>
           <tr>
             <th className="bg-primary">Transaction Hash</th>
@@ -24,7 +24,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
         {isLoading ? (
           <tbody>
             {[...Array(20)].map((_, rowIndex) => (
-              <tr key={rowIndex} className="bg-base-200 hover:bg-base-300 transition-colors duration-200 h-12">
+              <tr key={rowIndex} className="bg-super-dark hover:bg-base-300 transition-colors duration-200 h-12">
                 {[...Array(7)].map((_, colIndex) => (
                   <td className="w-1/12" key={colIndex}>
                     <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
@@ -42,7 +42,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
                 const functionCalled = tx.input.substring(0, 10);
 
                 return (
-                  <tr key={tx.hash} className="hover text-sm">
+                  <tr key={tx.hash} className="hover  text-sm">
                     <td className="w-1/12">
                       <TransactionHash hash={tx.hash} />
                     </td>
