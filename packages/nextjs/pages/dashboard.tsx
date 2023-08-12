@@ -12,7 +12,10 @@ const Dashboard = () => {
   const { address } = useAccount();
   const [openAccountCreation, setOpenAccountCreation] = useState(false);
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
-  const displayAddress = address?.slice(0, 5) + "..." + address?.slice(-4);
+  const [displayAddress, setDisplayAddress] = useState("0x0000...0000");
+  React.useEffect(() => {
+    setDisplayAddress(address ? address?.slice(0, 5) + "..." + address?.slice(-4) : "0x0000...0000");
+  }, [address]);
 
   const [nftContractAddress, setNftContractAddress] = useState("");
   const [walletChainId, setWalletChainId] = useState<string | bigint>("");
@@ -44,11 +47,7 @@ const Dashboard = () => {
               </div>
               <div className="grid justify-between">
                 <p>Address</p>
-                {address ? (
-                  <p className="text-[2.2 rem]">{displayAddress}</p>
-                ) : (
-                  <p className="text-[2.2 rem]">0x000..000</p>
-                )}
+                <p className="text-[1.2rem]">{displayAddress}</p>
               </div>
             </div>
             <div className="grid gap-2 items-center justify-between grid-flow-col">
@@ -68,10 +67,10 @@ const Dashboard = () => {
           className="bg-super-dark p-8 grid min-h-[256px] cursor-pointer rounded justify-center items-center "
         >
           <div className=" grid gap-3">
-            <p className="grid justify-center ">
+            <div className="grid justify-center ">
               {" "}
               <BiPlus size={35} />
-            </p>
+            </div>
             <p className="text-xl">Create Wallet</p>
           </div>
         </div>
