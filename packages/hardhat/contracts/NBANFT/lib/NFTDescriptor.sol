@@ -137,7 +137,7 @@ library NFTDescriptor {
     }
 
     function generateSVGMainAccount(address _account) private pure returns (string memory svg) {
-        string memory _accountAddress = uint160(_account).toHexString(20);
+        string memory _accountAddress =_account == address(0) ? "Not set" : uint160(_account).toHexString(20);
         svg = string(
             abi.encodePacked(
                 '<g id="account-text" style="transform:translate(29px, 255px)">',
@@ -148,7 +148,7 @@ library NFTDescriptor {
                 '<tspan fill="rgba(255,255,255,0.6)">Main Acc',
                 unicode'💼',
                 ': </tspan>',
-                 _accountAddress.truncateAddress(),
+                 _accountAddress,
                 '</text></g>'
             )
         );
@@ -166,7 +166,7 @@ library NFTDescriptor {
                 '<tspan fill="rgba(255,255,255,0.6)">Owner',
                 unicode'🤖',
                 ': </tspan>',
-                 _ownerAddress.truncateAddress(),
+                 _ownerAddress,
                 '</text></g>'
             )
         );
