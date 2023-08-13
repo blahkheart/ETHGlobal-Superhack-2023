@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState } from "react";
 
-interface AccountContextType {
+export interface IAccountContextType {
   accountAddress: string | null;
   updateAccountAddress: (newAddress: string) => void;
 }
 
-const AccountContext = createContext<AccountContextType | undefined>(undefined);
+const AccountContext = createContext<IAccountContextType | undefined>(undefined);
 
 export function AccountContextProvider({ children }: { children: React.ReactNode }) {
   const [accountAddress, setAccountAddress] = useState<string | null>(null);
