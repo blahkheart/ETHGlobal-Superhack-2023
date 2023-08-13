@@ -23,7 +23,7 @@ const Dashboard = () => {
         ? address?.slice(0, 5) + "..." + address?.slice(-4)
         : "0x0000...0000",
     );
-  }, [accountAddress]);
+  }, [accountAddress, address]);
   async function createWallet() {
     const wallet = await initWallet();
     if (!wallet) return alert("Could not generate wallet");
