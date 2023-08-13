@@ -1,46 +1,69 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Blockies from "react-blockies";
 import { BiPlus } from "react-icons/bi";
 import { useAccount } from "wagmi";
+import { Balance } from "~~/components/scaffold-eth";
 import PageHOC from "~~/components/superhack/PageHOC";
 import ConfirmWalletModal from "~~/components/superhack/modals/ConfirmWalletModal";
+import { IAccountContextType, useAccountContext } from "~~/context/AccountContext";
+import { initWallet } from "~~/utils/account/createAccount";
 
 const Dashboard = () => {
+  const { accountAddress, updateAccountAddress } = useAccountContext();
   const { address } = useAccount();
+  const [activeTab, setActiveTab] = useState("my tokens");
   const [isOpen, setIsOpen] = useState(false);
   const displayAddress = address?.slice(0, 5) + "..." + address?.slice(-4);
+
+
+  async function createWallet() {
+    const wallet = await initWallet();
+    if (!wallet) return alert("Could not generate wallet");
+    updateAccountAddress(wallet);
+  }
+
+  async function handleWalletCreated() {
+    await createWallet();
+    setIsOpen(false);
+  }
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+  };
+
+
   return (
     <div className="dashboard__container mt-10">
       <div className=" dashboard__container-content ">
         <div className="bg-super-dark p-8 min-h-[246px] rounded">
-          <p className="text-xl">Accout 1</p>
+          <p className="text-xl">Account</p>
           <div className="mt-8 px-3">
             <div className="grid grid-flow-col justify-start gap-4 mb-6">
               <div>
                 <Blockies
                   className="mx-auto rounded-xl"
                   size={18}
-                  seed={address ? address.toLowerCase() : "0x0000000000"}
+                  seed={accountAddress ? accountAddress.toLowerCase() : "0x0000000000"}
                   scale={3}
                 />
               </div>
               <div className="grid justify-between">
                 <p>Address</p>
-                {address ? (
-                  <p className="text-[2.2 rem]">{displayAddress}</p>
+                {accountAddress ? (
+                  <p className="text-[2.2 rem]">{accountAddress}</p>
                 ) : (
-                  <p className="text-[2.2 rem]">0x000..000</p>
+                  <p className="text-[2.2 rem]">{displayAddress}</p>
                 )}
               </div>
             </div>
             <div className="grid gap-2 items-center justify-between grid-flow-col">
               <div>
                 <p>Balance</p>
-                <p className="text-[2.2rem] ">$0.00</p>
+                <Balance className="text-[2.2rem]" address={accountAddress ? accountAddress : displayAddress} />
               </div>
               <div>
                 <p>Token Balance</p>
-                <p className="text-[2.2rem] ">--</p>
+                <Balance className="text-[2.2rem]" address={accountAddress ? accountAddress : displayAddress} />
               </div>
             </div>
           </div>
@@ -51,7 +74,6 @@ const Dashboard = () => {
         >
           <div className=" grid gap-3">
             <p className="grid justify-center ">
-              {" "}
               <BiPlus size={35} />
             </p>
             <p className="text-xl">Create Wallet</p>
@@ -61,27 +83,44 @@ const Dashboard = () => {
       <div>
         <div className="mt-8 rounded bg-super-dark ">
           <div className="grid sm:grid-cols-2 ">
-            <div className="text-center py-8 border-b-[3px] border-super-gradient">
+            <button
+              className={`text-center py-8 border-b-[3px]  ${
+                activeTab === "my tokens" ? "border-b-[3px] border-super-gradient" : "border-[#ffffff90]"
+              }`}
+              onClick={() => handleTabChange("my tokens")}
+            >
               <p className="text-[1.2rem] md:text-[1.8rem]">My Tokens</p>
-            </div>
-            <div className="text-center py-8 border-b-[3px] border-gray-600">
+            </button>
+            <button
+              className={`text-center py-8 border-b-[3px]  ${
+                activeTab === "all tokens" ? "border-b-[3px] border-super-gradient" : "border-[#ffffff90]"
+              }`}
+              onClick={() => handleTabChange("all tokens")}
+            >
               <p className="md:text-[1.8rem]">All Tokens</p>
-            </div>
+            </button>
           </div>
-          <div className="grid justify-center  items-center min-h-[485px]">
-            <div className="grid gap-8 text-center justify-center">
-              <p className="text-[1.2rem] md:text-[1.8rem]">You don’t have any funds on this account</p>
-              <button className="px-12 py-5 border-[1px] border-super-gradient rounded-2xl bg-black w-fit mx-auto">
-                {" "}
-                Deposit
-              </button>
-            </div>
+
+          <div className="min-h-[485px]">
+            {activeTab === "my tokens" ? (
+              <div className="grid justify-center  items-center  min-h-[480px] ">
+                <div className="grid gap-8 text-center justify-center">
+                  <p className="text-[1.2rem] md:text-[1.8rem]">You don’t have any funds on this account</p>
+                  <button className="px-12 py-5 border-[1px] border-super-gradient rounded-2xl bg-black w-fit mx-auto">
+                    {" "}
+                    Deposit
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center min-h-[480px]">Ho</div>
+            )}
           </div>
         </div>
       </div>
       {isOpen && (
         <ConfirmWalletModal
-          onClose={() => setIsOpen(false)}
+          onClose={handleWalletCreated}
           message="Confirm adding"
           details="You are about to add an nft to be a wallet"
         />
