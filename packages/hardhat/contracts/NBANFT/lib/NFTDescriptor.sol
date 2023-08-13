@@ -80,7 +80,7 @@ library NFTDescriptor {
         svg = string(
             abi.encodePacked(
                 '<g id="inner-circle-1">',
-                '<circle cx="162px" cy="73px" r="8px" fill="',
+                '<circle cx="162px" cy="73px" r="8px" fill="#',
                 _color.toColor(),
                 '"/></g>'
             )
@@ -91,7 +91,7 @@ library NFTDescriptor {
         svg = string(
             abi.encodePacked(
                 '<g id="inner-circle-2">',
-                '<circle cx="137px" cy="97px" r="15px" fill="',
+                '<circle cx="137px" cy="97px" r="15px" fill="#',
                _color.toColor(),
                 '"/></g>'
             )
@@ -102,7 +102,7 @@ library NFTDescriptor {
         svg = string(
             abi.encodePacked(
                 '<g id="inner-circle-3">',
-                '<circle cx="105px" cy="98px" r="9px" fill="',
+                '<circle cx="105px" cy="98px" r="9px" fill="#',
                _color.toColor(),
                 '"/></g>'
             )
@@ -113,7 +113,7 @@ library NFTDescriptor {
         svg = string(
             abi.encodePacked(
                 '<g id="inner-circle-4">',
-                '<circle cx="142px" cy="139px" r="12px" fill="',
+                '<circle cx="142px" cy="138px" r="12px" fill="#',
                _color.toColor(),
                 '"/></g>'
             )
@@ -137,14 +137,14 @@ library NFTDescriptor {
     }
 
     function generateSVGMainAccount(address _account) private pure returns (string memory svg) {
-        string memory _accountAddress =_account == address(0) ? "Not set" : uint160(_account).toHexString(20);
+        string memory _accountAddress = _account == address(0) ? "Not set" : uint160(_account).toHexString(20).truncateAddress();
         svg = string(
             abi.encodePacked(
                 '<g id="account-text" style="transform:translate(29px, 255px)">',
                 '<rect width="218px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>',
                 '<text x="12px" y="17px" font-family="',
                 "'Courier New', monospace",
-                '" font-size="13px" fill="white">',
+                '" font-size="12px" fill="white">',
                 '<tspan fill="rgba(255,255,255,0.6)">Main Acc',
                 unicode'💼',
                 ': </tspan>',
@@ -154,7 +154,7 @@ library NFTDescriptor {
         );
     }
 
-    function generateSVGOwner(address _owner) private pure returns (string memory svg) {
+    function generateSVGOwner(address _owner) public  pure returns (string memory svg) {
         string memory _ownerAddress =uint160( _owner).toHexString(20);
         svg = string(
             abi.encodePacked(
@@ -162,11 +162,11 @@ library NFTDescriptor {
                 '<rect width="218px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>',
                 '<text x="12px" y="17px" font-family="',
                 "'Courier New', monospace",
-                '" font-size="13px" fill="white">',
+                '" font-size="12px" fill="white">',
                 '<tspan fill="rgba(255,255,255,0.6)">Owner',
                 unicode'🤖',
                 ': </tspan>',
-                 _ownerAddress,
+                _ownerAddress.truncateAddress(),
                 '</text></g>'
             )
         );
@@ -202,7 +202,8 @@ library NFTDescriptor {
                     " and is owned by ",
                     unicode"🤖",
                     uint160(params.owner).toHexString(20),
-                    "\\nNBA NFT is an experiment",
+                    '\\n',
+                    "NBA NFT is an experiment",
                     unicode"🧪",
                     " at combining digital ownership with self-governing capabilities"
                 )
@@ -216,7 +217,7 @@ library NFTDescriptor {
                 abi.encodePacked(
                     "[",
                     getJsonAttribute("Chain ID", _svgParams.chainId.toString(), false),
-                    getJsonAttribute("Implementation",uint160(_svgParams.implementation).toHexString(20), false),
+                    getJsonAttribute("Default Implementation",uint160(_svgParams.implementation).toHexString(20), false),
                     abi.encodePacked(
                         getJsonAttribute("Main Account", uint160(_svgParams.mainAccount).toHexString(20), false),
                         getJsonAttribute("Owner", uint160(_svgParams.owner).toHexString(20), true),
