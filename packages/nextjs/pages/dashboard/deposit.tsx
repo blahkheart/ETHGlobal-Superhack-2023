@@ -3,9 +3,13 @@ import { AiOutlineCopy } from "react-icons/ai";
 import QRCode from "react-qr-code";
 import { useAccount } from "wagmi";
 import PageHOC from "~~/components/superhack/PageHOC";
+import { useAccountContext } from "~~/context/AccountContext";
 
 const Deposit = () => {
+  const { accountAddress } = useAccountContext();
   const { address } = useAccount();
+  console.log(accountAddress);
+
   return (
     <div className=" mt-28  deposit__container  h-full">
       <div className="grid  gap-8 deposit__container-content min-h-[37.7rem]">
@@ -14,7 +18,7 @@ const Deposit = () => {
           <p className="mb-8 gradient-text">(DIRECT TRANSFER)</p>
           <p>Send ETH, tokens or collectables (NFTs) to this address:</p>
           <div className="bg-black p-3 mt-4 flex justify-between rounded-md">
-            <p>00000....00000</p>
+            <p>{accountAddress ? accountAddress?.toString() : address?.toString() || ""}</p>
             <AiOutlineCopy size={18} className="" />
           </div>
 
@@ -22,7 +26,7 @@ const Deposit = () => {
             <QRCode
               size={256}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-              value={address?.toString() || ""}
+              value={accountAddress ? accountAddress?.toString() : address?.toString() || ""}
               viewBox={`0 0 256 256`}
             />
           </div>

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Blockies from "react-blockies";
 import { BiPlus } from "react-icons/bi";
 import { useAccount } from "wagmi";
 import { Balance } from "~~/components/scaffold-eth";
 import PageHOC from "~~/components/superhack/PageHOC";
 import ConfirmWalletModal from "~~/components/superhack/modals/ConfirmWalletModal";
-import { IAccountContextType, useAccountContext } from "~~/context/AccountContext";
+import { useAccountContext } from "~~/context/AccountContext";
 import { initWallet } from "~~/utils/account/createAccount";
 
 const Dashboard = () => {
@@ -14,7 +14,6 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("my tokens");
   const [isOpen, setIsOpen] = useState(false);
   const displayAddress = address?.slice(0, 5) + "..." + address?.slice(-4);
-
 
   async function createWallet() {
     const wallet = await initWallet();
@@ -30,7 +29,6 @@ const Dashboard = () => {
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
   };
-
 
   return (
     <div className="dashboard__container mt-10">
@@ -59,7 +57,11 @@ const Dashboard = () => {
             <div className="grid gap-2 items-center justify-between grid-flow-col">
               <div>
                 <p>Balance</p>
-                <Balance className="text-[2.2rem]" address={accountAddress ? accountAddress : displayAddress} />
+                <Balance
+                  className="text-[2.2rem]"
+                  priceBalance={true}
+                  address={accountAddress ? accountAddress : displayAddress}
+                />
               </div>
               <div>
                 <p>Token Balance</p>

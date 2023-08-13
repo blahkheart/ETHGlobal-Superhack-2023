@@ -8,6 +8,7 @@ import { useDarkMode } from "usehooks-ts";
 import { WagmiConfig } from "wagmi";
 import { Footer } from "~~/components/Footer";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
+import { AccountContextProvider } from "~~/context/AccountContext";
 import { useNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { useGlobalState } from "~~/services/store/store";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
@@ -42,7 +43,9 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
         <div className="flex flex-col min-h-screen ">
           {/*  <Header /> */}
           <main className="relative flex flex-col flex-1">
-            <Component {...pageProps} />
+            <AccountContextProvider>
+              <Component {...pageProps} />
+            </AccountContextProvider>
           </main>
           <Footer />
         </div>
