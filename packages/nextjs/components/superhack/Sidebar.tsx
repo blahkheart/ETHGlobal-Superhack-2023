@@ -14,17 +14,17 @@ const Sidebar = () => {
     {
       name: "Transfer",
       icon: <BiTransfer size={24} className="" />,
-      path: "/transfer",
+      path: "/dashboard/transfer",
     },
     {
       name: "Deposit",
       icon: <MdOutlineSavings size={24} className="" />,
-      path: "/deposit",
+      path: "/dashboard/deposit",
     },
     {
       name: "Transactions",
       icon: <BiCalendar size={24} className="" />,
-      path: "/transactions",
+      path: "/dashboard/transactions",
     },
   ];
   return (
