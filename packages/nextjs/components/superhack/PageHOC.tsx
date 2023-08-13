@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import { AccountContextProvider } from "~~/context/AccountContext";
 
 // Define the type for the props that the wrapped component will receive
 type ComponentProps = {
@@ -16,7 +17,9 @@ const PageHOC = (Component: React.ComponentType<ComponentProps>) => {
 
       <div className="w-full px-8 lg:px-16">
         <Navbar />
-        <Component {...props} />
+        <AccountContextProvider>
+          <Component {...props} />
+        </AccountContextProvider>
       </div>
     </div>
   );
