@@ -35,6 +35,11 @@ p {
   @apply shadow-none;
 }
 
+button,
+input {
+  font-family: "Raleway", sans-serif;
+}
+
 .gradient-text {
   background: var(--txt-gradient, linear-gradient(180deg, #c4ff04 0%, #f0e 100%));
   background-clip: text;
@@ -84,5 +89,56 @@ p {
 @container deposit (max-width: 900px) {
   .deposit__container-content {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Button */
+.rainbow-btn {
+  max-width: 12rem;
+  min-width: 10rem;
+  text-align: center;
+  position: relative;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 1rem;
+  box-sizing: border-box;
+  display: block;
+  z-index: 2;
+  overflow: hidden;
+  padding: 1px;
+}
+.rainbow-btn:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(115deg, #c4ff04, #c4ff04, #f0e, #f0e, #c4ff04);
+  background-size: 50% 100%;
+}
+.rainbow-btn span {
+  position: relative;
+  z-index: 2;
+  padding: 0.6rem 0;
+  text-decoration: none;
+  align-items: center;
+  background: #111115;
+  border-radius: 1rem;
+  display: block;
+  justify-content: center;
+  box-sizing: border-box;
+  height: 100%;
+  font-family: "Raleway", sans-serif;
+}
+
+.rainbow-btn:focus:before,
+.rainbow-btn:hover:before {
+  animation: rainbow-btn 0.75s linear infinite;
+}
+
+@keyframes rainbow-btn {
+  to {
+    transform: translateX(-50%);
   }
 }
