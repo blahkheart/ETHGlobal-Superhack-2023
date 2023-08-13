@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Blockies from "react-blockies";
 import { BiPlus } from "react-icons/bi";
 import { useAccount } from "wagmi";
+import { WalletIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { Balance } from "~~/components/scaffold-eth";
 import PageHOC from "~~/components/superhack/PageHOC";
-import ConfirmWalletModal from "~~/components/superhack/modals/ConfirmWalletModal";
+import BaseModal from "~~/components/superhack/modals/BaseModal";
 import { useAccountContext } from "~~/context/AccountContext";
 import { initWallet } from "~~/utils/account/createAccount";
 
@@ -13,8 +14,16 @@ const Dashboard = () => {
   const { address } = useAccount();
   const [activeTab, setActiveTab] = useState("my tokens");
   const [isOpen, setIsOpen] = useState(false);
-  const displayAddress = address?.slice(0, 5) + "..." + address?.slice(-4);
-
+  const [displayAddress, setDisplayAddress] = useState("0x0000...0000");
+  useEffect(() => {
+    setDisplayAddress(
+      accountAddress
+        ? accountAddress?.slice(0, 5) + "..." + accountAddress?.slice(-4)
+        : address
+        ? address?.slice(0, 5) + "..." + address?.slice(-4)
+        : "0x0000...0000",
+    );
+  }, [accountAddress]);
   async function createWallet() {
     const wallet = await initWallet();
     if (!wallet) return alert("Could not generate wallet");
@@ -47,11 +56,8 @@ const Dashboard = () => {
               </div>
               <div className="grid justify-between">
                 <p>Address</p>
-                {accountAddress ? (
-                  <p className="text-[2.2 rem]">{accountAddress}</p>
-                ) : (
-                  <p className="text-[2.2 rem]">{displayAddress}</p>
-                )}
+
+                <p className="text-[2.2 rem]">{displayAddress}</p>
               </div>
             </div>
             <div className="grid gap-2 items-center justify-between grid-flow-col">
@@ -121,11 +127,23 @@ const Dashboard = () => {
         </div>
       </div>
       {isOpen && (
-        <ConfirmWalletModal
-          onClose={handleWalletCreated}
-          message="Confirm adding"
-          details="You are about to add an nft to be a wallet"
-        />
+        <BaseModal onClose={() => setIsOpen(false)}>
+          <div className="relative text-center max-w-[500px] md:w-[500px] flex flex-col gap-5 items-center justify-center bg-super-dark rounded-xl p-8">
+            {/* Render an XMarkIcon with an onClick event that calls the onClose function */}
+            <XMarkIcon
+              onClick={() => setIsOpen(false)}
+              className="w-8 h-8 text-[#a2aab6] cursor-pointer absolute right-6 top-6"
+            />
+            <div className="p-2 w-fit rounded-xl bg-[#a2aab6]">
+              <WalletIcon className="w-8 h-8 " /> {/* Render a WalletIcon */}
+            </div>
+            <h3 className="text-lg font-bold mb-0">Create account</h3> {/* Render the main message */}
+            <p className="mt-0 text-[#a2aab6]"></p>
+            <button onClick={handleWalletCreated} className="border-b-2 rounded-2xl p-3">
+              Confirm account creation
+            </button>
+          </div>
+        </BaseModal>
       )}
     </div>
   );
