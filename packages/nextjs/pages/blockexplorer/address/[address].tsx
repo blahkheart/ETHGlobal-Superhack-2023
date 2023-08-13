@@ -13,7 +13,6 @@ import {
   TransactionsTable,
 } from "~~/components/blockexplorer/";
 import { Address, Balance } from "~~/components/scaffold-eth";
-import PageHOC from "~~/components/superhack/PageHOC";
 import deployedContracts from "~~/generated/deployedContracts";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
@@ -58,7 +57,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
   );
 
   return (
-    <div className="mt-10 mb-20">
+    <div className="m-10 mb-20">
       <div className="flex justify-start mb-5">
         <button className="btn btn-sm btn-primary" onClick={() => router.back()}>
           Back
@@ -126,7 +125,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
   );
 };
 
-export default PageHOC(AddressPage);
+export default AddressPage;
 
 async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath: string) {
   const buildInfoFiles = fs.readdirSync(buildInfoDirectory);
