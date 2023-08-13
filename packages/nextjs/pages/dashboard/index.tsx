@@ -139,7 +139,7 @@ const Dashboard = () => {
             </div>
             <h3 className="text-lg font-bold mb-0">Create account</h3> {/* Render the main message */}
             <p className="mt-0 text-[#a2aab6]"></p>
-            <button onClick={handleWalletCreated} className="border-b-2 rounded-2xl p-3">
+            <button onClick={handleWalletCreated} className="hover:bg-black border-b-2 rounded-2xl p-3">
               Confirm account creation
             </button>
           </div>
