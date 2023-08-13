@@ -148,7 +148,7 @@ library NFTDescriptor {
                 '<tspan fill="rgba(255,255,255,0.6)">Main Acc',
                 unicode'💼',
                 ': </tspan>',
-                 _accountAddress,
+                _accountAddress,
                 '</text></g>'
             )
         );
