@@ -27,6 +27,15 @@ import "./NBADescriptor.sol";
   @dev Explain to a developer any extra details
 */
 
+/*
+TODOs
+  function comments
+  call Registry contract during mint and create a token bound account on mint | salt = hash(address(this) + chainId + tokenId)
+  set tokens default account to the account created while minting
+  function to pause/unpause mint
+  function to set team's address
+*/
+
 contract NBA is ERC721Enumerable, Ownable {
     using Address for address;
     using Strings for uint256;
@@ -38,14 +47,15 @@ contract NBA is ERC721Enumerable, Ownable {
     uint256 public price = 0.02 ether;
     uint256 public maxMintAmount = 5;
     bool public paused = false;
-    address constant dev = 0xCA7632327567796e51920F6b16373e92c7823854;
+    address constant team = 0xCA7632327567796e51920F6b16373e92c7823854;
+    address public defaultAccountImplementation;
     Counters.Counter private _tokenIdCounter;
 
     mapping(uint256 => bytes3) public color_1;
     mapping(uint256 => bytes3) public color_2;
     mapping(uint256 => bytes3) public color_3;
     mapping(uint256 => bytes3) public color_4;
-    mapping(uint256 => address) public tokenIdToImplementation;
+    mapping(uint256 => address) public tokenIdToDefaultAccountImplementation;
     mapping (uint256 => address) public mainAccount;
  
     constructor(
@@ -71,12 +81,18 @@ contract NBA is ERC721Enumerable, Ownable {
             uint256 _tokenId = _tokenIdCounter.current();
             _safeMint(msg.sender, _tokenId);
             _generateColors(_tokenId);
+            if(defaultAccountImplementation != address(0)) 
+                tokenIdToDefaultAccountImplementation[_tokenId] = defaultAccountImplementation;
         }
     }
 
     function setMainAccount(uint256 tokenId, address _accountAddress) public {
-        require(msg.sender == ownerOf(tokenId), "Not Owner");
+        require(msg.sender == ownerOf(tokenId), "Not NFT Owner");
         mainAccount[tokenId] = _accountAddress;
+    }
+
+    function setDefaultAccountImplementation( address _accountAddress) public onlyOwner{
+        defaultAccountImplementation = _accountAddress;
     }
 
     function tokenURI(
@@ -90,7 +106,7 @@ contract NBA is ERC721Enumerable, Ownable {
             color_2: color_2[id],
             color_3: color_3[id],
             color_4: color_4[id],
-            implementation: tokenIdToImplementation[id],
+            implementation: tokenIdToDefaultAccountImplementation[id],
             owner: ownerOf(id),
             mainAccount: mainAccount[id]
         });
@@ -109,8 +125,8 @@ contract NBA is ERC721Enumerable, Ownable {
             }("");
             require(public_goods);
 
-            // This will payout the dev the rest of the initial Revenue.
-            (bool success, ) = payable(dev).call{value: address(this).balance}("");
+            // This will payout the team the rest of the Revenue.
+            (bool success, ) = payable(team).call{value: address(this).balance}("");
             require(success);
 
     }
