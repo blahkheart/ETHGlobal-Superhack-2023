@@ -5,6 +5,7 @@ import { Transaction, TransactionReceipt, formatEther, formatUnits } from "viem"
 import { usePublicClient } from "wagmi";
 import { hardhat } from "wagmi/chains";
 import { Address } from "~~/components/scaffold-eth";
+import PageHOC from "~~/components/superhack/PageHOC";
 import { decodeTransactionData, getFunctionDetails, getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const TransactionPage: NextPage = () => {
@@ -130,4 +131,4 @@ const TransactionPage: NextPage = () => {
   );
 };
 
-export default TransactionPage;
+export default PageHOC(TransactionPage);

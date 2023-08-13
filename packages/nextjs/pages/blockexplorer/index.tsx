@@ -4,6 +4,7 @@ import { hardhat } from "wagmi/chains";
 import { PaginationButton } from "~~/components/blockexplorer/PaginationButton";
 import { SearchBar } from "~~/components/blockexplorer/SearchBar";
 import { TransactionsTable } from "~~/components/blockexplorer/TransactionsTable";
+import PageHOC from "~~/components/superhack/PageHOC";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 
@@ -57,4 +58,4 @@ const Blockexplorer: NextPage = () => {
   );
 };
 
-export default Blockexplorer;
+export default PageHOC(Blockexplorer);

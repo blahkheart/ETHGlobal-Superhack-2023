@@ -16,6 +16,7 @@ import { Address, Balance } from "~~/components/scaffold-eth";
 import deployedContracts from "~~/generated/deployedContracts";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
+import PageHOC from "~~/components/superhack/PageHOC";
 
 type AddressCodeTabProps = {
   bytecode: string;
@@ -125,7 +126,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
   );
 };
 
-export default AddressPage;
+export default PageHOC(AddressPage);
 
 async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath: string) {
   const buildInfoFiles = fs.readdirSync(buildInfoDirectory);
