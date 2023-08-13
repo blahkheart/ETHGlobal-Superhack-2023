@@ -2,8 +2,13 @@ import React from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
-const PageHOC = <T extends object>(Component: React.ComponentType<T>) => {
-  const WrappedComponent = (T: any) => (
+// Define the type for the props that the wrapped component will receive
+type ComponentProps = {
+  // Define your props here
+};
+
+const PageHOC = (Component: React.ComponentType<ComponentProps>) => {
+  const WrappedComponent = (props: ComponentProps) => (
     <div className="pagehoc__container">
       <div className="">
         <Sidebar />
@@ -11,7 +16,7 @@ const PageHOC = <T extends object>(Component: React.ComponentType<T>) => {
 
       <div className="w-full px-8 lg:px-16">
         <Navbar />
-        <Component {...T} />
+        <Component {...props} />
       </div>
     </div>
   );

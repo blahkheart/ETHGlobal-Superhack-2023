@@ -91,7 +91,7 @@ export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
 export function getBlockExplorerAddressLink(network: chains.Chain, address: string) {
   const blockExplorerBaseURL = network.blockExplorers?.default?.url;
   if (network.id === chains.hardhat.id) {
-    return `/transactions/address/${address}`;
+    return `/blockexplorer/address/${address}`;
   }
 
   if (!blockExplorerBaseURL) {
