@@ -8,7 +8,7 @@ export const TransactionHash = ({ hash }: { hash: string }) => {
 
   return (
     <div className="flex items-center">
-      <Link href={`/blockexplorer/transaction/${hash}`}>
+      <Link href={`/transactions/transaction/${hash}`}>
         {hash?.substring(0, 6)}...{hash?.substring(hash.length - 4)}
       </Link>
       {addressCopied ? (

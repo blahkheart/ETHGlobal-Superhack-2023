@@ -2,13 +2,34 @@ import React, { useState } from "react";
 import Blockies from "react-blockies";
 import { BiPlus } from "react-icons/bi";
 import { useAccount } from "wagmi";
+import { XMarkIcon } from "@heroicons/react/20/solid";
+import { AddressInput, IntegerInput } from "~~/components/scaffold-eth";
 import PageHOC from "~~/components/superhack/PageHOC";
-import ConfirmWalletModal from "~~/components/superhack/modals/ConfirmWalletModal";
+import BaseModal from "~~/components/superhack/modals/BaseModal";
+import LoadingModal from "~~/components/superhack/modals/LoadingModal";
 
 const Dashboard = () => {
   const { address } = useAccount();
-  const [isOpen, setIsOpen] = useState(false);
-  const displayAddress = address?.slice(0, 5) + "..." + address?.slice(-4);
+  const [openAccountCreation, setOpenAccountCreation] = useState(false);
+  const [isCreatingAccount, setIsCreatingAccount] = useState(false);
+  const [displayAddress, setDisplayAddress] = useState("0x0000...0000");
+  React.useEffect(() => {
+    setDisplayAddress(address ? address?.slice(0, 5) + "..." + address?.slice(-4) : "0x0000...0000");
+  }, [address]);
+
+  const [nftContractAddress, setNftContractAddress] = useState("");
+  const [walletChainId, setWalletChainId] = useState<string | bigint>("");
+  const [nftTokedId, setNftTokenId] = useState<string | bigint>("");
+  const [walletImplementationContractAddress, setWalletImplementationContractAddress] = useState("");
+
+  const handleAccountCreation = async () => {
+    setIsCreatingAccount(true);
+    console.log("handleAccountCreation");
+    console.log("nftContractAddress", nftContractAddress);
+    console.log("walletChainId", walletChainId);
+    console.log("nftTokedId", nftTokedId);
+    console.log("walletImplementationContractAddress", walletImplementationContractAddress);
+  };
   return (
     <div className="dashboard__container mt-10">
       <div className=" dashboard__container-content ">
@@ -26,11 +47,7 @@ const Dashboard = () => {
               </div>
               <div className="grid justify-between">
                 <p>Address</p>
-                {address ? (
-                  <p className="text-[2.2 rem]">{displayAddress}</p>
-                ) : (
-                  <p className="text-[2.2 rem]">0x000..000</p>
-                )}
+                <p className="text-[1.2rem]">{displayAddress}</p>
               </div>
             </div>
             <div className="grid gap-2 items-center justify-between grid-flow-col">
@@ -46,14 +63,14 @@ const Dashboard = () => {
           </div>
         </div>
         <div
-          onClick={() => setIsOpen(true)}
+          onClick={() => setOpenAccountCreation(true)}
           className="bg-super-dark p-8 grid min-h-[256px] cursor-pointer rounded justify-center items-center "
         >
           <div className=" grid gap-3">
-            <p className="grid justify-center ">
+            <div className="grid justify-center ">
               {" "}
               <BiPlus size={35} />
-            </p>
+            </div>
             <p className="text-xl">Create Wallet</p>
           </div>
         </div>
@@ -79,13 +96,61 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      {isOpen && (
-        <ConfirmWalletModal
-          onClose={() => setIsOpen(false)}
-          message="Confirm adding"
-          details="You are about to add an nft to be a wallet"
-        />
+      {openAccountCreation && (
+        <BaseModal onClose={() => setOpenAccountCreation(false)}>
+          <div className="relative  max-w-[500px] md:w-[500px] flex flex-col gap-5 items-center justify-center bg-super-dark rounded-xl p-8">
+            {/* Render an XMarkIcon with an onClick event that calls the onClose function */}
+            <XMarkIcon
+              onClick={() => setOpenAccountCreation(false)}
+              className="w-8 h-8 text-[#a2aab6] cursor-pointer absolute right-6 top-6"
+            />
+            <div className="mt-8">
+              <div className="mb-3">
+                <p>Account implementaion</p>
+                <AddressInput
+                  name="walletImplementationContractAddress"
+                  placeholder="Account implementaion"
+                  value={walletImplementationContractAddress}
+                  onChange={setWalletImplementationContractAddress}
+                />
+              </div>
+              <div className="mt-3">
+                <p>Account chainId</p>
+                <IntegerInput
+                  name="walletChainId"
+                  placeholder="Account chainId"
+                  value={walletChainId}
+                  onChange={setWalletChainId}
+                />
+              </div>
+              <div className="mt-3">
+                <p>NFT contract address</p>
+                <AddressInput
+                  name="nftContractAddress"
+                  placeholder="NFT contract address"
+                  value={nftContractAddress}
+                  onChange={setNftContractAddress}
+                />
+              </div>
+              <div className="mt-3">
+                <p>NFt Token Id</p>
+                <IntegerInput
+                  name="nftTokedId"
+                  placeholder="NFt Token Id"
+                  value={nftTokedId}
+                  onChange={setNftTokenId}
+                />
+              </div>
+              <div className="mt-6 grid justify-end">
+                <button onClick={handleAccountCreation} className="rounded-full border-2 py-3 px-6">
+                  Create Account
+                </button>
+              </div>
+            </div>
+          </div>
+        </BaseModal>
       )}
+      {isCreatingAccount && <LoadingModal message="Creating account" />}
     </div>
   );
 };
