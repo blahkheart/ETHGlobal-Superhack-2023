@@ -3544,6 +3544,7 @@ __metadata:
     "@types/qrcode": ^1.0.0
     "@typescript-eslint/eslint-plugin": latest
     "@typescript-eslint/parser": latest
+    base64-sol: 1.0.1
     chai: ~4.3.6
     dotenv: ~16.0.3
     envfile: ~6.18.0
@@ -6473,6 +6474,13 @@ __metadata:
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
   checksum: 669632eb3745404c2f822a18fc3a0122d2f9a7a13f7fb8b5823ee19d1d2ff9ee5b52c53367176ea4ad093c332fd5ab4bd0ebae5a8e27917a4105a4cfc86b1005
+  languageName: node
+  linkType: hard
+
+"base64-sol@npm:1.0.1":
+  version: 1.0.1
+  resolution: "base64-sol@npm:1.0.1"
+  checksum: be0f9e8cf3c744256913223fbae8187773f530cc096e98a77f49ef0bd6cedeb294d15a784e439419f7cb99f07bf85b08999169feafafa1a9e29c3affc0bc6d0a
   languageName: node
   linkType: hard
 
