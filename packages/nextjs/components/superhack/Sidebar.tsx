@@ -26,7 +26,7 @@ const Sidebar = () => {
     {
       name: "Transactions",
       icon: <BiCalendar size={24} className="" />,
-      path: "/dashboard/transactions",
+      path: "/blockexplorer",
     },
   ];
   return (
