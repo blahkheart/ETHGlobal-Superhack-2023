@@ -17,6 +17,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "base64-sol/base64.sol";
 import "./lib/ToColor.sol";
+import "./lib/ColorGenerator.sol";
 import "./NBADescriptor.sol";
 
 /**
@@ -108,7 +109,7 @@ contract NBA is ERC721Enumerable, Ownable {
             _tokenIdCounter.increment();
             uint256 _tokenId = _tokenIdCounter.current();
             _safeMint(msg.sender, _tokenId);
-            _generateColors(_tokenId);
+            ColorGenerator.generateColors(_tokenId, color_1, color_2, color_3, color_4);
             if(defaultAccountImplementation != address(0)) 
                 tokenIdToDefaultAccountImplementation[_tokenId] = defaultAccountImplementation;
         }
@@ -187,41 +188,6 @@ contract NBA is ERC721Enumerable, Ownable {
         uint256 share = balance * 15 / 100;
         payable(team).transfer(balance - share);
         payable(0x97843608a00e2bbc75ab0C1911387E002565DEDE).transfer(share); // buidlguidl address
-    }
-
-    /**
-     * @notice Internal function to generate colors for a specific tokenId.
-     * @param _tokenId The ID of the NFT.
-     * @dev Uses the hash of token id, blockhash, msg.sender, block timestamp, this contract's address, and bitwise operations for generating the colors.
-     */
-    function _generateColors(uint256 _tokenId) private {
-        // Generate a "predictable random" hash for the given tokenId
-        bytes32 predictableRandom = keccak256(
-            abi.encodePacked(
-                _tokenId,
-                blockhash(block.number - 1),
-                msg.sender,
-                block.timestamp,
-                address(this)
-            )
-        );
-
-        color_1[_tokenId] = bytes2(predictableRandom[0]) |
-            (bytes2(predictableRandom[1]) >> 4) |
-            (bytes3(predictableRandom[2]) >> 8);
-
-        color_2[_tokenId] = bytes2(predictableRandom[3]) |
-            (bytes2(predictableRandom[2]) >> 16) |
-            (bytes3(predictableRandom[1]) >> 8);
-
-        color_3[_tokenId] = bytes2(predictableRandom[2]) |
-            (bytes2(predictableRandom[0]) >> 8) |
-            (bytes3(predictableRandom[1]) >> 16);
-
-
-        color_4[_tokenId] = bytes2(predictableRandom[4]) |
-            (bytes2(predictableRandom[5]) >> 4) |
-            (bytes3(predictableRandom[6]) >> 16);
     }
 
 }
