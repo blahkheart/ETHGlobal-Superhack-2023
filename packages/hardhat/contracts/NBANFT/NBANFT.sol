@@ -1,26 +1,37 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.8;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+/**
+    !Disclaimer!
+    please review this code on your own before using any of
+    the following code for production.
+    Dannithomx will not be liable in any way if for the use 
+    of the code. That being said, the code has been tested 
+    to the best of the developers' knowledge to work as intended.
+*/
+
+
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "base64-sol/base64.sol";
 import "./lib/ToColor.sol";
 import "./NBADescriptor.sol";
 
 /**
-  @title NBA NFT Contract
-  @author Danny Thomx
-  @notice Explain to an end user what this does
-  @dev Explain to a developer any extra details
-*/
+ * @title NBA NFT Contract
+ * @author Danny Thomx
+ * @notice This contract mints and manages the NBA NFTs.
+ * @dev Ensure you're familiar with ERC721 standard before interacting with this contract.
+ */
 
 /*
 TODOs
-  function comments
-  call Registry contract during mint and create a token bound account on mint | salt = hash(address(this) + chainId + tokenId)
-  set tokens default account to the account created while minting
   function to pause/unpause mint
   function to set team's address
+  call Registry contract during mint and create a token bound account on mint | salt = hash(address(this) + chainId + tokenId)
+  set tokens default account to the account created while minting
+  test withdraw function
 */
 
 contract NBA is ERC721Enumerable, Ownable {
@@ -30,29 +41,57 @@ contract NBA is ERC721Enumerable, Ownable {
     using ToColor for bytes3;
     using Counters for Counters.Counter;
 
+    /// @dev Maximum number of NFTs available for minting.
     uint256 public maxSupply = 2000;
+
+    /// @dev Cost of minting an NFT.
     uint256 public price = 0.02 ether;
+
+    /// @dev Maximum number of NFTs one can mint in a single transaction.
     uint256 public maxMintAmount = 5;
+
+    /// @dev State variable to control minting functionality.
     bool public paused = false;
+
+    /// @dev Address of the team for revenue sharing.
     address constant team = 0xCA7632327567796e51920F6b16373e92c7823854;
+
+    /// @dev Address of the default account implementation.
     address public defaultAccountImplementation;
+
+    /// @dev Counter for tracking tokenIds.
     Counters.Counter private _tokenIdCounter;
 
-    mapping(uint256 => bytes3) public color_1;
-    mapping(uint256 => bytes3) public color_2;
-    mapping(uint256 => bytes3) public color_3;
-    mapping(uint256 => bytes3) public color_4;
+    /// @dev Mapping to store colors associated with NFTs.
+    mapping(uint256 => bytes3) private color_1;
+    mapping(uint256 => bytes3) private color_2;
+    mapping(uint256 => bytes3) private color_3;
+    mapping(uint256 => bytes3) private color_4;
+
+    /// @dev Mapping to store default accounts for each tokenId.
     mapping(uint256 => address) public tokenIdToDefaultAccountImplementation;
+
+    /// @dev Mapping to store main accounts for each tokenId.
     mapping (uint256 => address) public mainAccount;
- 
+    
+    /**
+     * @notice Contract constructor to set the name and symbol for the NFT.
+     * @param _name Name of the NFT.
+     * @param _symbol Symbol of the NFT.
+     */
     constructor(
         string memory _name,
         string memory _symbol
     ) ERC721(_name, _symbol) {  }
 
-
+    /// @notice Allow the contract to receive Ether.
     receive() external payable {}
 
+    /**
+     * @notice Allows users to mint new NFTs.
+     * @param _mintAmount Number of NFTs user wants to mint.
+     * @dev The function checks for maximum minting limit and ensures correct payment.
+     */
     function mintItem(uint256 _mintAmount) public payable {
         uint256 supply = totalSupply();
         require(!paused, "Minting paused");
@@ -63,6 +102,7 @@ contract NBA is ERC721Enumerable, Ownable {
         if (msg.sender != owner()) {
             require(msg.value >= price * _mintAmount, "Insufficient ETH");
         }
+        
         for (uint256 i = 1; i <= _mintAmount; i++) {
             _tokenIdCounter.increment();
             uint256 _tokenId = _tokenIdCounter.current();
@@ -73,19 +113,33 @@ contract NBA is ERC721Enumerable, Ownable {
         }
     }
 
+    /**
+     * @notice Set main account for a specific tokenId.
+     * @param tokenId The ID of the NFT.
+     * @param _accountAddress Address of the main account.
+     */
     function setMainAccount(uint256 tokenId, address _accountAddress) public {
         require(msg.sender == ownerOf(tokenId), "Not NFT Owner");
         mainAccount[tokenId] = _accountAddress;
     }
 
-    function setDefaultAccountImplementation( address _accountAddress) public onlyOwner{
+    /**
+     * @notice Set default account implementation.
+     * @param _accountAddress Address of the default account implementation.
+     * @dev Only the owner can set this.
+     */
+    function setDefaultAccountImplementation( address _accountAddress) public onlyOwner {
         defaultAccountImplementation = _accountAddress;
     }
 
-    function tokenURI(
-        uint256 id
-    ) public view override returns (string memory _tokenURI) {
+    /**
+     * @notice Provides the URI for a specific NFT.
+     * @param id The ID of the NFT.
+     * @return _tokenURI URI of the NFT.
+     */
+    function tokenURI(uint256 id) public view override returns (string memory _tokenURI) {
         require(_exists(id), "not exist");
+
         NFTDescriptor.SVGParams memory _svgParams = NFTDescriptor.SVGParams({
             chainId: block.chainid,
             tokenId: id,
@@ -97,32 +151,53 @@ contract NBA is ERC721Enumerable, Ownable {
             owner: ownerOf(id),
             mainAccount: mainAccount[id]
         });
+
         _tokenURI = NBADescriptor.constructTokenURI(_svgParams);
     }
 
-    function setmaxMintAmount(uint8 _newmaxMintAmount) public onlyOwner {
-        maxSupply = _newmaxMintAmount;
+    /**
+     * @notice Sets the maximum amount of NFTs that can be minted in one transaction.
+     * @param _newMaxSupply New max mint amount.
+     * @dev Only the owner can change this.
+     */
+    function setMaxSupply(uint256 _newMaxSupply) public onlyOwner {
+        maxSupply = _newMaxSupply;
     }
 
-    function withdraw() public payable onlyOwner {
-        address buidlguidl = 0x97843608a00e2bbc75ab0C1911387E002565DEDE;
+    // function withdraw() public payable onlyOwner {
+    //     address buidlguidl = 0x97843608a00e2bbc75ab0C1911387E002565DEDE;
 
-            (bool public_goods, ) = payable(buidlguidl).call{
-                value: (address(this).balance * 15) / 100
-            }("");
-            require(public_goods);
+    //         (bool public_goods, ) = payable(buidlguidl).call{
+    //             value: (address(this).balance * 15) / 100
+    //         }("");
+    //         require(public_goods);
 
-            // This will payout the team the rest of the Revenue.
-            (bool success, ) = payable(team).call{value: address(this).balance}("");
-            require(success);
+    //         // This will payout the team the rest of the Revenue.
+    //         (bool success, ) = payable(team).call{value: address(this).balance}("");
+    //         require(success);
+    // }
 
+    /**
+     * @notice Allows the owner to withdraw the contract's balance.
+     * @dev Only the owner can call this.
+     */
+    function withdraw() public onlyOwner {
+        uint256 balance = address(this).balance;
+        uint256 share = balance * 15 / 100;
+        payable(team).transfer(balance - share);
+        payable(0x97843608a00e2bbc75ab0C1911387E002565DEDE).transfer(share); // buidlguidl address
     }
 
-    function _generateColors(uint256 tokenId) private {
+    /**
+     * @notice Internal function to generate colors for a specific tokenId.
+     * @param _tokenId The ID of the NFT.
+     * @dev Uses the hash of token id, blockhash, msg.sender, block timestamp, this contract's address, and bitwise operations for generating the colors.
+     */
+    function _generateColors(uint256 _tokenId) private {
         // Generate a "predictable random" hash for the given tokenId
         bytes32 predictableRandom = keccak256(
             abi.encodePacked(
-                tokenId,
+                _tokenId,
                 blockhash(block.number - 1),
                 msg.sender,
                 block.timestamp,
@@ -130,22 +205,22 @@ contract NBA is ERC721Enumerable, Ownable {
             )
         );
 
-        color_1[tokenId] = bytes2(predictableRandom[0]) |
+        color_1[_tokenId] = bytes2(predictableRandom[0]) |
             (bytes2(predictableRandom[1]) >> 4) |
             (bytes3(predictableRandom[2]) >> 8);
 
-        color_2[tokenId] = bytes2(predictableRandom[3]) |
+        color_2[_tokenId] = bytes2(predictableRandom[3]) |
             (bytes2(predictableRandom[2]) >> 16) |
             (bytes3(predictableRandom[1]) >> 8);
 
-        color_3[tokenId] = bytes2(predictableRandom[2]) |
+        color_3[_tokenId] = bytes2(predictableRandom[2]) |
             (bytes2(predictableRandom[0]) >> 8) |
             (bytes3(predictableRandom[1]) >> 16);
 
 
-        color_4[tokenId] = bytes2(predictableRandom[4]) |
+        color_4[_tokenId] = bytes2(predictableRandom[4]) |
             (bytes2(predictableRandom[5]) >> 4) |
             (bytes3(predictableRandom[6]) >> 16);
-
     }
+
 }
