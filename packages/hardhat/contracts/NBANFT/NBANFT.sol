@@ -185,8 +185,8 @@ contract NBA is ERC721Enumerable, Ownable {
     function withdraw() public onlyOwner {
         uint256 balance = address(this).balance;
         uint256 share = balance * 15 / 100;
-        payable(team).transfer(balance - share);
-        payable(0x97843608a00e2bbc75ab0C1911387E002565DEDE).transfer(share); // buidlguidl address
+        payable(0x97843608a00e2bbc75ab0C1911387E002565DEDE).transfer(share); // transfer to buidlguidl address
+        payable(team).transfer(balance - share); // transfer to team address
     }
 
 }
