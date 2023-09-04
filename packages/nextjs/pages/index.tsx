@@ -22,7 +22,7 @@ const Home: NextPage = () => {
             </Link>
           </div>
           <div className="w-full md:w-2/5 ">
-            <div className="w-full transform md:scale-110 scale-90 md:ml-24 flex items-center justify-center">
+            <div className="w-full transform md:scale-110 scale-90 flex items-center justify-center">
               <Image src={"/assets/hero-image.png"} width={415} height={427} alt="hero-image"></Image>
             </div>
           </div>

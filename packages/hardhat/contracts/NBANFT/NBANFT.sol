@@ -14,7 +14,6 @@ pragma solidity ^0.8.8;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "base64-sol/base64.sol";
 import "./lib/ToColor.sol";
 import "./lib/ColorGenerator.sol";
 import "./NBADescriptor.sol";
@@ -74,7 +73,8 @@ contract NBA is ERC721Enumerable, Ownable {
 
     /// @dev Mapping to store main accounts for each tokenId.
     mapping (uint256 => address) public mainAccount;
-    
+    address private immutable tokenDescriptor;
+
     /**
      * @notice Contract constructor to set the name and symbol for the NFT.
      * @param _name Name of the NFT.
@@ -82,8 +82,11 @@ contract NBA is ERC721Enumerable, Ownable {
      */
     constructor(
         string memory _name,
-        string memory _symbol
-    ) ERC721(_name, _symbol) {  }
+        string memory _symbol,
+        address _descriptor
+    ) ERC721(_name, _symbol) {
+        tokenDescriptor = _descriptor;
+    }
 
     /// @notice Allow the contract to receive Ether.
     receive() external payable {}
@@ -153,15 +156,15 @@ contract NBA is ERC721Enumerable, Ownable {
             mainAccount: mainAccount[id]
         });
 
-        _tokenURI = NBADescriptor.constructTokenURI(_svgParams);
+       _tokenURI = NBADescriptor(tokenDescriptor).constructTokenURI(_svgParams);
     }
 
     /**
-     * @notice Sets the maximum amount of NFTs that can be minted in one transaction.
-     * @param _newMaxSupply New max mint amount.
+     * @notice Sets the maximum amount of NFTs that can be minted.
+     * @param _newMaxSupply New max supply amount.
      * @dev Only the owner can change this.
      */
-    function setMaxSupply(uint256 _newMaxSupply) public onlyOwner {
+    function setMaxTokenSupply(uint256 _newMaxSupply) public onlyOwner {
         maxSupply = _newMaxSupply;
     }
 

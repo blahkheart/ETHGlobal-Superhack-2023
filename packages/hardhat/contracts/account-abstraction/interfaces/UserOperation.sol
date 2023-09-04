@@ -49,15 +49,15 @@ library UserOperationLib {
     //relayer/block builder might submit the TX with higher priorityFee, but the user should not
     // pay above what he signed for.
     function gasPrice(UserOperation calldata userOp) internal view returns (uint256) {
-    unchecked {
-        uint256 maxFeePerGas = userOp.maxFeePerGas;
-        uint256 maxPriorityFeePerGas = userOp.maxPriorityFeePerGas;
-        if (maxFeePerGas == maxPriorityFeePerGas) {
-            //legacy mode (for networks that don't support basefee opcode)
-            return maxFeePerGas;
+        unchecked {
+            uint256 maxFeePerGas = userOp.maxFeePerGas;
+            uint256 maxPriorityFeePerGas = userOp.maxPriorityFeePerGas;
+            if (maxFeePerGas == maxPriorityFeePerGas) {
+                //legacy mode (for networks that don't support basefee opcode)
+                return maxFeePerGas;
+            }
+            return min(maxFeePerGas, maxPriorityFeePerGas + block.basefee);
         }
-        return min(maxFeePerGas, maxPriorityFeePerGas + block.basefee);
-    }
     }
 
     function pack(UserOperation calldata userOp) internal pure returns (bytes memory ret) {

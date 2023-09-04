@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 library TruncateAddress {
 
-    function truncateAddress(string memory _address) public pure returns(string memory) {
+    function truncateAddress(string memory _address) internal pure returns(string memory) {
         bytes memory addressBytes = bytes(_address);
         require(addressBytes.length == 42, "Invalid address length");
         

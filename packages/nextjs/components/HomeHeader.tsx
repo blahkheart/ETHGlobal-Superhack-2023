@@ -8,17 +8,25 @@ const HomeHeader = () => {
     <header>
       <div className=" py-8 pt-10 flex justify-between container mx-auto">
         <div>
-          <Image width={135} height={46} src={"/assets/logo.svg"} alt="NBA logo" />
+          <Link href="/">
+            <Image width={135} height={46} src={"/assets/logo.svg"} alt="NBA logo" />
+          </Link>
         </div>
         <div className="flex flex-row space-x-10">
-          <Link href="/mint" className="rainbow-btn small w-[5rem]">
-            <span>Mint NFT</span>
+          <Link href="/mint">
+            <button className="rainbow-btn small w-[5rem]">
+              <span>Mint NFT</span>
+            </button>
           </Link>
-          <Link href="/list" className="rainbow-btn small w-[6rem]">
-            <span>View NFT</span>
+          <Link href="/list">
+            <button className="rainbow-btn small w-[6rem]">
+              <span>View NFTs</span>
+            </button>
           </Link>
-          <Link href="/dashboard" className="rainbow-btn small w-[5rem]">
-            <span>Go to app</span>
+          <Link href="/dashboard">
+            <button className="rainbow-btn small w-[5rem]">
+              <span>Go to app</span>
+            </button>
           </Link>
           <RainbowKitCustomConnectButton />
         </div>

@@ -154,7 +154,7 @@ library NFTDescriptor {
         );
     }
 
-    function generateSVGOwner(address _owner) public  pure returns (string memory svg) {
+    function generateSVGOwner(address _owner) internal  pure returns (string memory svg) {
         string memory _ownerAddress =uint160( _owner).toHexString(20);
         svg = string(
             abi.encodePacked(
