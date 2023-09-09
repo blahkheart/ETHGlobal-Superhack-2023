@@ -5,7 +5,7 @@ const contracts = {
       name: "localhost",
       contracts: {
         AccountFactory: {
-          address: "0xc431d84c0051fAB6220dDbda917BE48eC7A2eC74",
+          address: "0x58DB38D2cAc51Df79d16F089E65E7E021B07eA0E",
           abi: [
             {
               inputs: [
@@ -81,8 +81,415 @@ const contracts = {
             },
           ],
         },
+        ERC6551Account: {
+          address: "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
+          abi: [
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "_target",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "_value",
+                  type: "uint256",
+                },
+                {
+                  internalType: "bytes",
+                  name: "_data",
+                  type: "bytes",
+                },
+                {
+                  internalType: "uint256",
+                  name: "_operation",
+                  type: "uint256",
+                },
+              ],
+              name: "execute",
+              outputs: [
+                {
+                  internalType: "bytes",
+                  name: "_result",
+                  type: "bytes",
+                },
+              ],
+              stateMutability: "payable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "bytes32",
+                  name: "hash",
+                  type: "bytes32",
+                },
+                {
+                  internalType: "bytes",
+                  name: "signature",
+                  type: "bytes",
+                },
+              ],
+              name: "isValidSignature",
+              outputs: [
+                {
+                  internalType: "bytes4",
+                  name: "magicValue",
+                  type: "bytes4",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "signer",
+                  type: "address",
+                },
+                {
+                  internalType: "bytes",
+                  name: "",
+                  type: "bytes",
+                },
+              ],
+              name: "isValidSigner",
+              outputs: [
+                {
+                  internalType: "bytes4",
+                  name: "",
+                  type: "bytes4",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256[]",
+                  name: "",
+                  type: "uint256[]",
+                },
+                {
+                  internalType: "uint256[]",
+                  name: "",
+                  type: "uint256[]",
+                },
+                {
+                  internalType: "bytes",
+                  name: "",
+                  type: "bytes",
+                },
+              ],
+              name: "onERC1155BatchReceived",
+              outputs: [
+                {
+                  internalType: "bytes4",
+                  name: "",
+                  type: "bytes4",
+                },
+              ],
+              stateMutability: "pure",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+                {
+                  internalType: "bytes",
+                  name: "",
+                  type: "bytes",
+                },
+              ],
+              name: "onERC1155Received",
+              outputs: [
+                {
+                  internalType: "bytes4",
+                  name: "",
+                  type: "bytes4",
+                },
+              ],
+              stateMutability: "pure",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "receivedTokenId",
+                  type: "uint256",
+                },
+                {
+                  internalType: "bytes",
+                  name: "",
+                  type: "bytes",
+                },
+              ],
+              name: "onERC721Received",
+              outputs: [
+                {
+                  internalType: "bytes4",
+                  name: "",
+                  type: "bytes4",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "owner",
+              outputs: [
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "state",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "bytes4",
+                  name: "interfaceId",
+                  type: "bytes4",
+                },
+              ],
+              name: "supportsInterface",
+              outputs: [
+                {
+                  internalType: "bool",
+                  name: "",
+                  type: "bool",
+                },
+              ],
+              stateMutability: "pure",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "token",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              stateMutability: "payable",
+              type: "receive",
+            },
+          ],
+        },
+        ERC6551Registry: {
+          address: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
+          abi: [
+            {
+              inputs: [],
+              name: "AccountCreationFailed",
+              type: "error",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: false,
+                  internalType: "address",
+                  name: "account",
+                  type: "address",
+                },
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "implementation",
+                  type: "address",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "chainId",
+                  type: "uint256",
+                },
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "tokenContract",
+                  type: "address",
+                },
+                {
+                  indexed: true,
+                  internalType: "uint256",
+                  name: "tokenId",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "salt",
+                  type: "uint256",
+                },
+              ],
+              name: "AccountCreated",
+              type: "event",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "implementation",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "chainId",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "tokenContract",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "tokenId",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "salt",
+                  type: "uint256",
+                },
+              ],
+              name: "account",
+              outputs: [
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "implementation",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "chainId",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "tokenContract",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "tokenId",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "salt",
+                  type: "uint256",
+                },
+                {
+                  internalType: "bytes",
+                  name: "initData",
+                  type: "bytes",
+                },
+              ],
+              name: "createAccount",
+              outputs: [
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+              ],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+          ],
+        },
         EntryPoint: {
-          address: "0x8F03fB0A68fE424F180658a0722E58A27A4c2963",
+          address: "0x89245C683D9f247a35fd9d7F3c0388DfdAD8554F",
           abi: [
             {
               inputs: [
@@ -1393,415 +1800,8 @@ const contracts = {
             },
           ],
         },
-        ERC6551Account: {
-          address: "0xc6e7DF5E7b4f2A278906862b61205850344D4e7d",
-          abi: [
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "_target",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "_value",
-                  type: "uint256",
-                },
-                {
-                  internalType: "bytes",
-                  name: "_data",
-                  type: "bytes",
-                },
-                {
-                  internalType: "uint256",
-                  name: "_operation",
-                  type: "uint256",
-                },
-              ],
-              name: "execute",
-              outputs: [
-                {
-                  internalType: "bytes",
-                  name: "_result",
-                  type: "bytes",
-                },
-              ],
-              stateMutability: "payable",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "bytes32",
-                  name: "hash",
-                  type: "bytes32",
-                },
-                {
-                  internalType: "bytes",
-                  name: "signature",
-                  type: "bytes",
-                },
-              ],
-              name: "isValidSignature",
-              outputs: [
-                {
-                  internalType: "bytes4",
-                  name: "magicValue",
-                  type: "bytes4",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "signer",
-                  type: "address",
-                },
-                {
-                  internalType: "bytes",
-                  name: "",
-                  type: "bytes",
-                },
-              ],
-              name: "isValidSigner",
-              outputs: [
-                {
-                  internalType: "bytes4",
-                  name: "",
-                  type: "bytes4",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256[]",
-                  name: "",
-                  type: "uint256[]",
-                },
-                {
-                  internalType: "uint256[]",
-                  name: "",
-                  type: "uint256[]",
-                },
-                {
-                  internalType: "bytes",
-                  name: "",
-                  type: "bytes",
-                },
-              ],
-              name: "onERC1155BatchReceived",
-              outputs: [
-                {
-                  internalType: "bytes4",
-                  name: "",
-                  type: "bytes4",
-                },
-              ],
-              stateMutability: "pure",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-                {
-                  internalType: "bytes",
-                  name: "",
-                  type: "bytes",
-                },
-              ],
-              name: "onERC1155Received",
-              outputs: [
-                {
-                  internalType: "bytes4",
-                  name: "",
-                  type: "bytes4",
-                },
-              ],
-              stateMutability: "pure",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "receivedTokenId",
-                  type: "uint256",
-                },
-                {
-                  internalType: "bytes",
-                  name: "",
-                  type: "bytes",
-                },
-              ],
-              name: "onERC721Received",
-              outputs: [
-                {
-                  internalType: "bytes4",
-                  name: "",
-                  type: "bytes4",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [],
-              name: "owner",
-              outputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [],
-              name: "state",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "bytes4",
-                  name: "interfaceId",
-                  type: "bytes4",
-                },
-              ],
-              name: "supportsInterface",
-              outputs: [
-                {
-                  internalType: "bool",
-                  name: "",
-                  type: "bool",
-                },
-              ],
-              stateMutability: "pure",
-              type: "function",
-            },
-            {
-              inputs: [],
-              name: "token",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              stateMutability: "payable",
-              type: "receive",
-            },
-          ],
-        },
-        ERC6551Registry: {
-          address: "0x3Aa5ebB10DC797CAC828524e59A333d0A371443c",
-          abi: [
-            {
-              inputs: [],
-              name: "AccountCreationFailed",
-              type: "error",
-            },
-            {
-              anonymous: false,
-              inputs: [
-                {
-                  indexed: false,
-                  internalType: "address",
-                  name: "account",
-                  type: "address",
-                },
-                {
-                  indexed: true,
-                  internalType: "address",
-                  name: "implementation",
-                  type: "address",
-                },
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "chainId",
-                  type: "uint256",
-                },
-                {
-                  indexed: true,
-                  internalType: "address",
-                  name: "tokenContract",
-                  type: "address",
-                },
-                {
-                  indexed: true,
-                  internalType: "uint256",
-                  name: "tokenId",
-                  type: "uint256",
-                },
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "salt",
-                  type: "uint256",
-                },
-              ],
-              name: "AccountCreated",
-              type: "event",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "implementation",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "chainId",
-                  type: "uint256",
-                },
-                {
-                  internalType: "address",
-                  name: "tokenContract",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "tokenId",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "salt",
-                  type: "uint256",
-                },
-              ],
-              name: "account",
-              outputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "implementation",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "chainId",
-                  type: "uint256",
-                },
-                {
-                  internalType: "address",
-                  name: "tokenContract",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "tokenId",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "salt",
-                  type: "uint256",
-                },
-                {
-                  internalType: "bytes",
-                  name: "initData",
-                  type: "bytes",
-                },
-              ],
-              name: "createAccount",
-              outputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-              ],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-          ],
-        },
         NBA: {
-          address: "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1",
+          address: "0x0B306BF915C4d645ff596e518fAf3F9669b97016",
           abi: [
             {
               inputs: [
@@ -2436,7 +2436,7 @@ const contracts = {
           ],
         },
         NBADescriptor: {
-          address: "0x59b670e9fA9D0A427751Af201D676719a970857b",
+          address: "0x9A676e781A523b5d0C0e43731313A708CB607508",
           abi: [
             {
               inputs: [
@@ -2507,7 +2507,7 @@ const contracts = {
           ],
         },
         Token: {
-          address: "0xFba8ECa400C6A5207546d605B69717D890871775",
+          address: "0x75Be4cA632be54DC56a278df4C8fd6baEb048847",
           abi: [
             {
               inputs: [

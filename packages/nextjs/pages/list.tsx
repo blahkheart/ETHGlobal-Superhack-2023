@@ -1,68 +1,19 @@
-import { useEffect, useState } from "react";
 import Image from "next/image";
-import { ethers } from "ethers";
 import type { NextPage } from "next";
-import { useAccount } from "wagmi";
-// import { alchemyProvider } from "wagmi/providers/alchemy";
 import HomeHeader from "~~/components/HomeHeader";
 import { MetaHeader } from "~~/components/MetaHeader";
-import { useDeployedContractInfo, useScaffoldContractRead } from "~~/hooks/scaffold-eth";
-import { useEthersProvider } from "~~/utils/scaffold-eth/ethersProvider";
-
+import { Spinner } from "~~/components/Spinner";
+import { useNBACollectible } from "~~/context/NBAContext";
 
 const List: NextPage = () => {
-  const [tokenId, setTokenId] = useState(1);
-  // const [quantity, setQuantity] = useState(1);
-  const [NBACollectibles, setNBACollectibles] = useState([]);
-  const { address } = useAccount();
-  const provider = useEthersProvider();
-  const { data: nbaContract } = useDeployedContractInfo("NBA");
-
-  const { data: balanceOf, isLoading: isLoadingBalanceOf } = useScaffoldContractRead({
-    contractName: "NBA",
-    functionName: "balanceOf",
-    args: [address],
-  });
-  console.log("BAL::", balanceOf);
-
-  useEffect(() => {
-    if (!nbaContract) return;
-    const test = async () => {
-      const nba = new ethers.Contract(nbaContract.address, nbaContract.abi, provider);
-      const nftBalance = await nba.balanceOf(address);
-
-      const collectibleUpdate = [];
-      for (let tokenIndex = 0; tokenIndex < nftBalance; ++tokenIndex) {
-        try {
-          console.log("Getting token index " + tokenIndex);
-          const tokenId = await nba.tokenOfOwnerByIndex(address, tokenIndex);
-          console.log("tokenId: " + tokenId);
-          const tokenURI = await nba.tokenURI(tokenId);
-          const jsonManifestString = Buffer.from(tokenURI.substring(29), "base64").toString();
-          console.log("jsonManifestString: " + jsonManifestString);
- 
-          try {
-            const jsonManifest = JSON.parse(jsonManifestString);
-            console.log("jsonManifest: " + jsonManifest);
-            collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: address, ...jsonManifest });
-          } catch (err) {
-            console.log(err);
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      }
-      setNBACollectibles(NBACollectibles.reverse());
-    };
-    if (address) test();
-  }, [nbaContract, address]);
+  const { NBACollectibles, isLoading } = useNBACollectible();
 
   return (
     <main className="bg-[#221e29]">
       <MetaHeader />
       <HomeHeader />
       <section
-        className="bg-contain bg-bottom mt-16 pb-16 pt-10"
+        className="bg-contain bg-bottom mt-16 pb-16"
         style={{
           background: `url("/assets/bg1.png")`,
           backgroundPositionY: "bottom",
@@ -70,11 +21,34 @@ const List: NextPage = () => {
           backgroundPositionX: "center",
         }}
       >
-        <div className="container flex flex-col mx-auto py-32 items-center justify-center text-center">
-          <div className="mb-6">
-            <Image src={"/assets/erc.png"} width={136} height={136} alt="erc logo" />
+        {!NBACollectibles ||
+          (isLoading && (
+            <div className="container flex flex-col mx-auto py-32 items-center justify-center text-center">
+              <div className="mb-6">
+                <Spinner />
+              </div>
+              <p> Loading... </p>
+            </div>
+          ))}
+        {NBACollectibles.length === 0 && !isLoading && (
+          <div className="container flex flex-col mx-auto py-32 items-center justify-center text-center">
+            <div className="mb-6">
+              <Image src={"/assets/erc.png"} width={136} height={136} alt="erc logo" />
+            </div>
+            <p> You have no NFT </p>
           </div>
-          <p> List of nfts </p>
+        )}
+
+        <div className="grid grid-cols-3">
+          {NBACollectibles.length > 0 &&
+            NBACollectibles.map(item => (
+              <div key={item.id} className="text-center mb-4 flex items-center justify-center flex-col">
+                <div className="my-2 rounded-lg">
+                  <Image src={item.image} alt="nft" width={250} height={200} />
+                </div>
+                <span>{item.name}</span>
+              </div>
+            ))}
         </div>
       </section>
     </main>

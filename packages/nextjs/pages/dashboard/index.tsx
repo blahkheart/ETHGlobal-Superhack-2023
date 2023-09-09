@@ -1,29 +1,34 @@
 import React, { useEffect, useState } from "react";
+import { ethers } from "ethers";
 import Blockies from "react-blockies";
 import { BiPlus } from "react-icons/bi";
 import { useAccount } from "wagmi";
 import { WalletIcon, XMarkIcon } from "@heroicons/react/20/solid";
-import { Balance } from "~~/components/scaffold-eth";
 import PageHOC from "~~/components/superhack/PageHOC";
 import BaseModal from "~~/components/superhack/modals/BaseModal";
 import { useAccountContext } from "~~/context/AccountContext";
+import { useNBACollectible } from "~~/context/NBAContext";
+import { NFTData } from "~~/types/nftData";
 import { initWallet } from "~~/utils/account/createAccount";
 
 const Dashboard = () => {
+  const { NBACollectibles, isLoading } = useNBACollectible();
   const { accountAddress, updateAccountAddress } = useAccountContext();
   const { address } = useAccount();
   const [activeTab, setActiveTab] = useState("my tokens");
   const [isOpen, setIsOpen] = useState(false);
   const [displayAddress, setDisplayAddress] = useState("0x0000...0000");
+  const [activeToken, setActiveToken] = useState<NFTData[]>([]);
+  const [mainAccount, setMainAccount] = useState("");
+
+  const truncateAddress = (address: string) => {
+    return address.slice(0, 5) + "..." + address.slice(-4);
+  };
+
   useEffect(() => {
-    setDisplayAddress(
-      accountAddress
-        ? accountAddress?.slice(0, 5) + "..." + accountAddress?.slice(-4)
-        : address
-        ? address?.slice(0, 5) + "..." + address?.slice(-4)
-        : "0x0000...0000",
-    );
-  }, [accountAddress, address]);
+    setDisplayAddress(address ?? ethers.ZeroAddress);
+  }, [address]);
+
   async function createWallet() {
     const wallet = await initWallet();
     if (!wallet) return alert("Could not generate wallet");
@@ -38,6 +43,45 @@ const Dashboard = () => {
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
   };
+
+  const handleSelectActiveToken = (e: any) => {
+    const _tokenId = parseInt(e.target.value);
+    const selectedToken = NBACollectibles.filter(token => token.id === _tokenId);
+    setActiveToken(selectedToken);
+  };
+  const getMainAccountFromTokenAttribute = (token: NFTData): string => {
+    const [mainAcc] = token.attributes.filter(item => item.trait_type === "Main Account");
+    return mainAcc.value;
+  };
+  useEffect(() => {
+    const loadDefaultMainAccount = async () => {
+      try {
+        if (NBACollectibles.length > 0) {
+          const defaultToken = NBACollectibles[0];
+          const mainAcc = getMainAccountFromTokenAttribute(defaultToken);
+          setMainAccount(mainAcc);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    loadDefaultMainAccount();
+  }, [NBACollectibles]);
+
+  useEffect(() => {
+    const setActiveTokenMainAccount = async () => {
+      try {
+        if (activeToken.length > 0) {
+          const [_activeToken] = activeToken;
+          const mainAcc = getMainAccountFromTokenAttribute(_activeToken);
+          setMainAccount(mainAcc);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    setActiveTokenMainAccount();
+  }, [activeToken]);
 
   return (
     <div className="dashboard__container mt-10">
@@ -55,23 +99,43 @@ const Dashboard = () => {
                 />
               </div>
               <div className="grid justify-between">
-                <p>Address</p>
+                <p>Owner</p>
 
-                <p className="text-[2.2 rem]">{displayAddress}</p>
+                <p className="text-[2.2 rem]">{truncateAddress(displayAddress)}</p>
               </div>
             </div>
             <div className="grid gap-2 items-center justify-between grid-flow-col">
               <div>
-                <p>Balance</p>
-                <Balance
-                  className="text-[2.2rem]"
-                  priceBalance={true}
-                  address={accountAddress ? accountAddress : displayAddress}
-                />
+                <p>Active token</p>
+                {NBACollectibles && NBACollectibles.length > 0 ? (
+                  <select className="select select-xs select-ghost bg-transparent" onChange={handleSelectActiveToken}>
+                    {NBACollectibles.map(item => (
+                      <option value={item.id} key={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <div className="animate-pulse flex space-x-4">
+                    <div className="rounded-md bg-slate-300 h-6 w-6"></div>
+                    <div className="flex items-center space-y-6">
+                      <div className="h-2 w-28 bg-slate-300 rounded"></div>
+                    </div>
+                  </div>
+                )}
               </div>
               <div>
-                <p>Token Balance</p>
-                <Balance className="text-[2.2rem]" address={accountAddress ? accountAddress : displayAddress} />
+                <p>Main Account</p>
+                {mainAccount && !isLoading ? (
+                  truncateAddress(mainAccount)
+                ) : (
+                  <div className="animate-pulse flex space-x-4">
+                    <div className="rounded-md bg-slate-300 h-6 w-6"></div>
+                    <div className="flex items-center space-y-6">
+                      <div className="h-2 w-28 bg-slate-300 rounded"></div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
