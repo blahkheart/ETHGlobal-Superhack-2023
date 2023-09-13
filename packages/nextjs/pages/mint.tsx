@@ -66,7 +66,7 @@ const Mint: NextPage = () => {
             }}
           />
           <button
-            disabled={maxMintAmount ? quantity >= maxMintAmount : false}
+            disabled={maxMintAmount ? quantity > maxMintAmount : false}
             className={`${isLoadingMaxMintAmount ? "loading" : ""} btn btn-secondly btn-lg mt-5`}
             onClick={handleMintNft}
           >

@@ -5,7 +5,6 @@ import { useDeployedContractInfo, useScaffoldContractRead } from "~~/hooks/scaff
 import { NFTData } from "~~/types/nftData";
 import { useEthersProvider } from "~~/utils/scaffold-eth/ethersProvider";
 
-
 interface INBAContext {
   NBACollectibles: NFTData[];
   isLoading: boolean;
@@ -49,7 +48,7 @@ export const NBACollectibleProvider: React.FC<{ children: ReactNode }> = ({ chil
           setIsLoading(false);
         }
       }
-    //   setNBACollectibles(collectibleUpdate.reverse());
+      //   setNBACollectibles(collectibleUpdate.reverse());
       setNBACollectibles(collectibleUpdate);
     };
     if (address) readyNBACollectibles();
