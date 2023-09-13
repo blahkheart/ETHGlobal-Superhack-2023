@@ -16,7 +16,6 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "base64-sol/base64.sol";
-import "./lib/ToColor.sol";
 import "./lib/ColorGenerator.sol";
 import "./NBADescriptor.sol";
 import "./interfaces/IERC6551Registry.sol";
@@ -28,10 +27,8 @@ import "./interfaces/IERC6551Registry.sol";
  */
 
 contract NBA is ERC721Enumerable, Ownable {
-    using Address for address;
     using Strings for uint256;
     using Strings for uint160;
-    using ToColor for bytes3;
     using Counters for Counters.Counter;
 
     /// @dev Maximum number of NFTs available for minting.
@@ -49,6 +46,15 @@ contract NBA is ERC721Enumerable, Ownable {
     /// @dev Address of the team for revenue sharing.
     address public team = 0xCA7632327567796e51920F6b16373e92c7823854;
 
+    /// @dev Address of the buidlGuidl for revenue sharing.
+    address public buidlGuidl = 0x97843608a00e2bbc75ab0C1911387E002565DEDE;
+
+    /// @dev 20% in basis points
+    uint256 private constant BUIDLGUIDL_ALLOCATION_BASIS_POINTS = 2000;
+
+    /// @dev Represents 100%
+    uint256 private constant BASIS_POINTS = 10000;
+
     /// @dev Address of the default account implementation.
     address public defaultAccountImplementation;
 
@@ -56,10 +62,10 @@ contract NBA is ERC721Enumerable, Ownable {
     Counters.Counter private _tokenIdCounter;
 
     /// @dev Mapping to store colors associated with NFTs.
-    mapping(uint256 => bytes3) private color_1;
-    mapping(uint256 => bytes3) private color_2;
-    mapping(uint256 => bytes3) private color_3;
-    mapping(uint256 => bytes3) private color_4;
+    mapping(uint256 => bytes3) public color_1;
+    mapping(uint256 => bytes3) public color_2;
+    mapping(uint256 => bytes3) public color_3;
+    mapping(uint256 => bytes3) public color_4;
 
     /// @dev Mapping to store default accounts for each tokenId.
     mapping(uint256 => address) public tokenIdToDefaultAccountImplementation;
@@ -97,6 +103,14 @@ contract NBA is ERC721Enumerable, Ownable {
     }
 
     /**
+     * @notice Owner users to change buidlGuidl's address.
+     * @param _newAddress new buidlGuidl address.
+     */
+    function setBGAddress(address _newAddress) public onlyOwner {
+        buidlGuidl = _newAddress;
+    }
+
+    /**
      * @notice Owner users to pause minting of NFTs.
      * @param _isPaused new pause state.
      */
@@ -126,6 +140,7 @@ contract NBA is ERC721Enumerable, Ownable {
             _safeMint(msg.sender, _tokenId);
             ColorGenerator.generateColors(_tokenId, color_1, color_2, color_3, color_4);
             address _createdAccount = registry.createAccount(defaultAccountImplementation, block.chainid, address(this), _tokenId, _tokenId, "");
+            require(_createdAccount != address(0), "Failed to create account");
             tokenIdToDefaultAccountImplementation[_tokenId] = defaultAccountImplementation;
             setMainAccount(_tokenId,_createdAccount);
         }
@@ -187,9 +202,9 @@ contract NBA is ERC721Enumerable, Ownable {
      */
     function withdraw() public onlyOwner {
         uint256 balance = address(this).balance;
-        uint256 share = balance * 20 / 100;
-        payable(team).transfer(balance - share);
-        payable(0x97843608a00e2bbc75ab0C1911387E002565DEDE).transfer(share); // buidlguidl address
+        uint256 buidlGuidlShare = balance * BUIDLGUIDL_ALLOCATION_BASIS_POINTS / BASIS_POINTS;
+        payable(team).transfer(balance - buidlGuidlShare);
+        payable(buidlGuidl).transfer(buidlGuidlShare);
     }
 
 }
