@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.8;
+pragma solidity ^0.8.2;
 
 /**
     !Disclaimer!
@@ -14,25 +14,18 @@ pragma solidity ^0.8.8;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "base64-sol/base64.sol";
 import "./lib/ToColor.sol";
 import "./lib/ColorGenerator.sol";
 import "./NBADescriptor.sol";
-
+import "./interfaces/IERC6551Registry.sol";
 /**
  * @title NBA NFT Contract
  * @author Danny Thomx
  * @notice This contract mints and manages the NBA NFTs.
  * @dev Ensure you're familiar with ERC721 standard before interacting with this contract.
  */
-
-/*
-TODOs
-  function to pause/unpause mint
-  function to set team's address
-  call Registry contract during mint and create a token bound account on mint | salt = hash(address(this) + chainId + tokenId)
-  set tokens default account to the account created while minting
-  test withdraw function
-*/
 
 contract NBA is ERC721Enumerable, Ownable {
     using Address for address;
@@ -54,7 +47,7 @@ contract NBA is ERC721Enumerable, Ownable {
     bool public paused = false;
 
     /// @dev Address of the team for revenue sharing.
-    address constant team = 0xCA7632327567796e51920F6b16373e92c7823854;
+    address public team = 0xCA7632327567796e51920F6b16373e92c7823854;
 
     /// @dev Address of the default account implementation.
     address public defaultAccountImplementation;
@@ -74,7 +67,7 @@ contract NBA is ERC721Enumerable, Ownable {
     /// @dev Mapping to store main accounts for each tokenId.
     mapping (uint256 => address) public mainAccount;
     address private immutable tokenDescriptor;
-
+    IERC6551Registry public registry;
     /**
      * @notice Contract constructor to set the name and symbol for the NFT.
      * @param _name Name of the NFT.
@@ -83,13 +76,33 @@ contract NBA is ERC721Enumerable, Ownable {
     constructor(
         string memory _name,
         string memory _symbol,
-        address _descriptor
+        address _descriptor,
+        IERC6551Registry _registry,
+        address _defaultImplementation
     ) ERC721(_name, _symbol) {
         tokenDescriptor = _descriptor;
-    }
+        defaultAccountImplementation =_defaultImplementation;
+        registry = _registry;
+      }
 
     /// @notice Allow the contract to receive Ether.
     receive() external payable {}
+
+    /**
+     * @notice Owner users to change team's address.
+     * @param _newAddress new team address.
+     */
+    function setTeamAddress(address _newAddress) public onlyOwner {
+        team = _newAddress;
+    }
+
+    /**
+     * @notice Owner users to pause minting of NFTs.
+     * @param _isPaused new pause state.
+     */
+    function pause(bool _isPaused)public onlyOwner {
+        paused = _isPaused;
+    }
 
     /**
      * @notice Allows users to mint new NFTs.
@@ -112,8 +125,9 @@ contract NBA is ERC721Enumerable, Ownable {
             uint256 _tokenId = _tokenIdCounter.current();
             _safeMint(msg.sender, _tokenId);
             ColorGenerator.generateColors(_tokenId, color_1, color_2, color_3, color_4);
-            if(defaultAccountImplementation != address(0)) 
-                tokenIdToDefaultAccountImplementation[_tokenId] = defaultAccountImplementation;
+            address _createdAccount = registry.createAccount(defaultAccountImplementation, block.chainid, address(this), _tokenId, _tokenId, "");
+            tokenIdToDefaultAccountImplementation[_tokenId] = defaultAccountImplementation;
+            setMainAccount(_tokenId,_createdAccount);
         }
     }
 
@@ -143,7 +157,6 @@ contract NBA is ERC721Enumerable, Ownable {
      */
     function tokenURI(uint256 id) public view override returns (string memory _tokenURI) {
         require(_exists(id), "not exist");
-
         NFTDescriptor.SVGParams memory _svgParams = NFTDescriptor.SVGParams({
             chainId: block.chainid,
             tokenId: id,
@@ -156,30 +169,17 @@ contract NBA is ERC721Enumerable, Ownable {
             mainAccount: mainAccount[id]
         });
 
-       _tokenURI = NBADescriptor(tokenDescriptor).constructTokenURI(_svgParams);
+        _tokenURI = NBADescriptor(tokenDescriptor).constructTokenURI(_svgParams);
     }
 
     /**
-     * @notice Sets the maximum amount of NFTs that can be minted.
-     * @param _newMaxSupply New max supply amount.
+     * @notice Sets the maximum amount of NFTs that can be minted in one transaction.
+     * @param _newMaxSupply New max mint amount.
      * @dev Only the owner can change this.
      */
-    function setMaxTokenSupply(uint256 _newMaxSupply) public onlyOwner {
+    function setMaxSupply(uint256 _newMaxSupply) public onlyOwner {
         maxSupply = _newMaxSupply;
     }
-
-    // function withdraw() public payable onlyOwner {
-    //     address buidlguidl = 0x97843608a00e2bbc75ab0C1911387E002565DEDE;
-
-    //         (bool public_goods, ) = payable(buidlguidl).call{
-    //             value: (address(this).balance * 15) / 100
-    //         }("");
-    //         require(public_goods);
-
-    //         // This will payout the team the rest of the Revenue.
-    //         (bool success, ) = payable(team).call{value: address(this).balance}("");
-    //         require(success);
-    // }
 
     /**
      * @notice Allows the owner to withdraw the contract's balance.
@@ -187,9 +187,9 @@ contract NBA is ERC721Enumerable, Ownable {
      */
     function withdraw() public onlyOwner {
         uint256 balance = address(this).balance;
-        uint256 share = balance * 15 / 100;
-        payable(0x97843608a00e2bbc75ab0C1911387E002565DEDE).transfer(share); // transfer to buidlguidl address
-        payable(team).transfer(balance - share); // transfer to team address
+        uint256 share = balance * 20 / 100;
+        payable(team).transfer(balance - share);
+        payable(0x97843608a00e2bbc75ab0C1911387E002565DEDE).transfer(share); // buidlguidl address
     }
 
 }

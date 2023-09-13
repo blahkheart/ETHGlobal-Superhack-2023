@@ -1,20 +1,57 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { useNBACollectible } from "~~/context/NBAContext";
+import { NFTData } from "~~/types/nftData";
+import { getMainAccountFromTokenAttribute } from "~~/utils/account/getMainAccountFromTokenAttribute";
 
 export interface IAccountContextType {
-  accountAddress: string | null;
-  updateAccountAddress: (newAddress: string) => void;
+  activeToken: any;
+  setActiveToken: (token: any) => void;
+  activeTokenMainAccount: string;
 }
 
 const AccountContext = createContext<IAccountContextType | undefined>(undefined);
 
 export function AccountContextProvider({ children }: { children: React.ReactNode }) {
-  const [accountAddress, setAccountAddress] = useState<string | null>(null);
+  const { NBACollectibles } = useNBACollectible();
+  const [activeToken, setActiveToken] = useState<NFTData[]>([]);
+  const [activeTokenMainAccount, setActiveTokenMainAccount] = useState("");
 
-  const updateAccountAddress = (newAddress: string) => {
-    setAccountAddress(newAddress);
-  };
+  useEffect(() => {
+    const loadDefaultMainAccount = async () => {
+      try {
+        if (NBACollectibles.length > 0) {
+          const defaultToken = NBACollectibles[0];
+          const mainAcc = getMainAccountFromTokenAttribute(defaultToken);
+          setActiveToken([defaultToken]);
+          setActiveTokenMainAccount(mainAcc);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    loadDefaultMainAccount();
+  }, [NBACollectibles]);
 
-  return <AccountContext.Provider value={{ accountAddress, updateAccountAddress }}>{children}</AccountContext.Provider>;
+  useEffect(() => {
+    const readyActiveTokenMainAccount = async () => {
+      try {
+        if (activeToken.length > 0) {
+          const [_activeToken] = activeToken;
+          const mainAcc = getMainAccountFromTokenAttribute(_activeToken);
+          setActiveTokenMainAccount(mainAcc);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    readyActiveTokenMainAccount();
+  }, [activeToken]);
+
+  return (
+    <AccountContext.Provider value={{ activeToken, setActiveToken, activeTokenMainAccount }}>
+      {children}
+    </AccountContext.Provider>
+  );
 }
 
 export function useAccountContext() {
