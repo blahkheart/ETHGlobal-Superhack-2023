@@ -18,19 +18,17 @@ const List: NextPage = () => {
   const provider = useEthersProvider();
   const { data: nbaContract } = useDeployedContractInfo("NBA");
 
-  const { data: balanceOf, isLoading: isLoadingBalanceOf } = useScaffoldContractRead({
+  const { data: nftBalance, isLoading: isLoadingBalanceOf } = useScaffoldContractRead({
     contractName: "NBA",
     functionName: "balanceOf",
     args: [address],
   });
-  console.log("BAL::", balanceOf);
+  console.log("BAL::", nftBalance);
 
   useEffect(() => {
-    if (!nbaContract) return;
+    if (!nbaContract || !nftBalance) return;
     const test = async () => {
       const nba = new ethers.Contract(nbaContract.address, nbaContract.abi, provider);
-      const nftBalance = await nba.balanceOf(address);
-
       const collectibleUpdate = [];
       for (let tokenIndex = 0; tokenIndex < nftBalance; ++tokenIndex) {
         try {
@@ -40,7 +38,6 @@ const List: NextPage = () => {
           const tokenURI = await nba.tokenURI(tokenId);
           const jsonManifestString = Buffer.from(tokenURI.substring(29), "base64").toString();
           console.log("jsonManifestString: " + jsonManifestString);
- 
           try {
             const jsonManifest = JSON.parse(jsonManifestString);
             console.log("jsonManifest: " + jsonManifest);
@@ -52,10 +49,10 @@ const List: NextPage = () => {
           console.log(err);
         }
       }
-      setNBACollectibles(NBACollectibles.reverse());
+      setNBACollectibles(collectibleUpdate.reverse());
     };
     if (address) test();
-  }, [nbaContract, address]);
+  }, [nbaContract, address, nftBalance]);
 
   return (
     <main className="bg-[#221e29]">

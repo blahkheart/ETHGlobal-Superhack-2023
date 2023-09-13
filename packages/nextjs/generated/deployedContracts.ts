@@ -1394,7 +1394,7 @@ const contracts = {
           ],
         },
         ERC6551Account: {
-          address: "0xc6e7DF5E7b4f2A278906862b61205850344D4e7d",
+          address: "0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE",
           abi: [
             {
               inputs: [
@@ -1665,7 +1665,7 @@ const contracts = {
           ],
         },
         ERC6551Registry: {
-          address: "0x3Aa5ebB10DC797CAC828524e59A333d0A371443c",
+          address: "0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1",
           abi: [
             {
               inputs: [],
@@ -1801,7 +1801,7 @@ const contracts = {
           ],
         },
         NBA: {
-          address: "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1",
+          address: "0x3Aa5ebB10DC797CAC828524e59A333d0A371443c",
           abi: [
             {
               inputs: [
@@ -2436,7 +2436,7 @@ const contracts = {
           ],
         },
         NBADescriptor: {
-          address: "0x59b670e9fA9D0A427751Af201D676719a970857b",
+          address: "0x68B1D87F95878fE05B998F19b66F4baba5De1aed",
           abi: [
             {
               inputs: [
