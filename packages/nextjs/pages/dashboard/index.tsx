@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ethers } from "ethers";
 import Blockies from "react-blockies";
 import { BiPlus } from "react-icons/bi";
-import { useAccount } from "wagmi";
+import { useAccount, useWalletClient } from "wagmi";
 import { useBalance } from "wagmi";
 import { WalletIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { Address } from "~~/components/scaffold-eth";
@@ -16,7 +16,9 @@ import { useNBACollectible } from "~~/context/NBAContext";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 import ethLogo from "~~/public/ethereum-eth-logo.svg";
+import { useAppStore } from "~~/services/store/store";
 import { truncateAddress } from "~~/utils/account/truncateAddress";
+import { getEthersSigner } from "~~/utils/scaffold-eth/ethersSigner";
 
 const Dashboard = () => {
   const { NBACollectibles, isLoading } = useNBACollectible();
@@ -27,7 +29,7 @@ const Dashboard = () => {
   const [implementation, setImplementation] = useState("");
   const [tokenId, setTokenId] = useState("");
   const [salt, setSalt] = useState("");
-  const [chainId, setChainId] = useState("31337");
+  const [chainId, setChainId] = useState("8453");
   const [tokenContract, setTokenContract] = useState("");
   const { activeTokenMainAccount } = useAccountContext();
   const {
@@ -38,6 +40,8 @@ const Dashboard = () => {
     address: activeTokenMainAccount,
     watch: true,
   });
+  const { data: accountContract } = useDeployedContractInfo("ERC6551Account");
+
   useEffect(() => {
     setDisplayAddress(address ?? ethers.ZeroAddress);
   }, [address]);
@@ -48,6 +52,8 @@ const Dashboard = () => {
 
   const { data: nbaContract } = useDeployedContractInfo("NBA");
   const { data: defaultImplementationContract } = useDeployedContractInfo("ERC6551Account");
+  const { data: walletClient } = useWalletClient();
+  const setCurrentWalletContract = useAppStore(state => state.setCurrentWalletContract);
 
   useEffect(() => {
     try {
@@ -59,6 +65,19 @@ const Dashboard = () => {
       console.log(e);
     }
   }, [nbaContract, defaultImplementationContract]);
+  const loadWallets = async () => {
+    if (!accountContract || activeTokenMainAccount === ethers.ZeroAddress || !walletClient) return;
+    const signer = await getEthersSigner(walletClient);
+    const contract = new ethers.Contract(activeTokenMainAccount, accountContract.abi, signer);
+    setCurrentWalletContract(contract);
+  };
+
+  // load wallets
+  useEffect(() => {
+    if (activeTokenMainAccount) {
+      void loadWallets();
+    }
+  }, [activeTokenMainAccount]);
 
   const { writeAsync: createNewAccount } = useScaffoldContractWrite({
     contractName: "ERC6551Registry",

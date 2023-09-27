@@ -3,16 +3,20 @@ import Image from "next/image";
 import { ethers } from "ethers";
 import { useWalletClient } from "wagmi";
 import { useBalance } from "wagmi";
+import { Spinner } from "~~/components/Spinner";
 import MyCollectibles from "~~/components/superhack/MyCollectibles";
 import PageHOC from "~~/components/superhack/PageHOC";
 import SelectActiveToken from "~~/components/superhack/SelectActiveToken";
 import { useAccountContext } from "~~/context/AccountContext";
 import { useNBACollectible } from "~~/context/NBAContext";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import { notification } from "~~/utils/scaffold-eth";
 import { getEthersSigner } from "~~/utils/scaffold-eth/ethersSigner";
+
 
 const Transfer = () => {
   const [activeTab, setActiveTab] = useState("sell");
+  const [isTxnLoading, setIsTxnLoading] = useState(false);
   const [destinationAddress, setDestinationAddress] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
   const [tokenAddress, setTokenAddress] = useState("");
@@ -48,32 +52,52 @@ const Transfer = () => {
   };
   const { data: walletClient } = useWalletClient();
   const { data: accountContract } = useDeployedContractInfo("ERC6551Account");
-
+  const clearInputData = () => {
+    setTransferAmount("");
+    setDestinationAddress("");
+  };
   async function transferEther() {
     try {
+      setIsTxnLoading(true);
       if (!accountContract || activeTokenMainAccount === ethers.ZeroAddress || !walletClient) return;
       const signer = await getEthersSigner(walletClient);
       const contract = new ethers.Contract(activeTokenMainAccount, accountContract.abi, signer);
       const tx = await contract.execute(destinationAddress, ethers.parseEther(transferAmount), "0x", 0);
       const receipt = await tx.wait();
       console.log("ETH_Transfer:", receipt);
+      receipt && clearInputData();
       return receipt.transactionHash;
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
+      notification.error(e.message);
+    } finally {
+      setIsTxnLoading(false);
     }
   }
 
   async function transferERC20Token(tokenAddress: string) {
-    if (!accountContract || !walletClient) return;
-    const signer = await getEthersSigner(walletClient);
-    const erc20Abi = ["function transfer(address to, uint256 value) public returns (bool)"];
-    const tokenContract = new ethers.Contract(tokenAddress, erc20Abi, signer);
-    const data = tokenContract.interface.encodeFunctionData("transfer", [destinationAddress, transferAmount]);
-    const walletContract = new ethers.Contract(activeTokenMainAccount, accountContract.abi, signer);
-    const tx = await walletContract.execute(tokenAddress, 0, data, 0);
-    const receipt = await tx.wait();
-    console.log("ERC20_Transfer:", receipt);
-    return receipt.transactionHash;
+    try {
+      setIsTxnLoading(true);
+      if (!accountContract || !walletClient) return;
+      const signer = await getEthersSigner(walletClient);
+      const erc20Abi = ["function transfer(address to, uint256 value) public returns (bool)"];
+      const tokenContract = new ethers.Contract(tokenAddress, erc20Abi, signer);
+      const data = tokenContract.interface.encodeFunctionData("transfer", [
+        destinationAddress,
+        ethers.parseEther(transferAmount),
+      ]);
+      const walletContract = new ethers.Contract(activeTokenMainAccount, accountContract.abi, signer);
+      const tx = await walletContract.execute(tokenAddress, 0, data, 0);
+      const receipt = await tx.wait();
+      receipt && clearInputData();
+      console.log("ERC20_Transfer:", receipt);
+      return receipt.transactionHash;
+    } catch (e: any) {
+      notification.error(e.message);
+      console.log("ERR_TRANSFERRING_ERC20TOKEN", e);
+    } finally {
+      setIsTxnLoading(false);
+    }
   }
 
   return (
@@ -157,11 +181,19 @@ const Transfer = () => {
               </div>
               <div className="mt-8 flex flex-col items-center">
                 <button
-                  disabled={!activeTokenMainAccount || activeTokenMainAccount === ethers.ZeroAddress}
+                  disabled={
+                    !activeTokenMainAccount ||
+                    activeTokenMainAccount === ethers.ZeroAddress ||
+                    !transferAmount ||
+                    !destinationAddress
+                  }
                   className="rainbow-btn"
                   onClick={transferEther}
                 >
-                  <span>Send</span>
+                  <span>
+                    {isTxnLoading && <Spinner />}
+                    Send
+                  </span>
                 </button>
               </div>
             </div>
@@ -247,11 +279,19 @@ const Transfer = () => {
 
               <div className="mt-8 flex flex-col items-center">
                 <button
-                  disabled={!activeTokenMainAccount || activeTokenMainAccount === ethers.ZeroAddress}
+                  disabled={
+                    !activeTokenMainAccount ||
+                    activeTokenMainAccount === ethers.ZeroAddress ||
+                    !transferAmount ||
+                    !destinationAddress
+                  }
                   className="rainbow-btn"
                   onClick={() => transferERC20Token(tokenAddress)}
                 >
-                  <span>Send</span>
+                  <span>
+                    {isTxnLoading && <Spinner />}
+                    Send
+                  </span>
                 </button>
               </div>
             </>

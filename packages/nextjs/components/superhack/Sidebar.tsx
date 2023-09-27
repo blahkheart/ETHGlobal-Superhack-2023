@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { BiCalendar, BiSolidDashboard, BiTransfer } from "react-icons/bi";
 import { MdOutlineSavings } from "react-icons/md";
 
+
 const Sidebar = () => {
   const router = useRouter();
   const sidebarList = [
@@ -23,6 +24,16 @@ const Sidebar = () => {
       icon: <MdOutlineSavings size={24} className="" />,
       path: "/dashboard/deposit",
     },
+    // {
+    //   name: "Safe Apps",
+    //   icon: <MdOutlineSavings size={24} className="" />,
+    //   path: "/dashboard/safe-app",
+    // },
+    // {
+    //   name: "Wallet connect",
+    //   icon: <MdOutlineSavings size={24} className="" />,
+    //   path: "/dashboard/wallet-connect",
+    // },
     {
       name: "Transactions",
       icon: <BiCalendar size={24} className="" />,

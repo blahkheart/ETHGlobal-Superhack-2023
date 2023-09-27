@@ -45,7 +45,9 @@ const Deposit = () => {
             <div>
               <p className="my-8 gradient-text">YOU HAVE NO NBA COLLECTIBLE</p>
               <Link href="/mint">
-                <button className="px-12 py-2 border-[1px] border-super-gradient rounded-2xl bg-black w-fit mx-auto">Mint NFT</button>
+                <button className="px-12 py-2 border-[1px] border-super-gradient rounded-2xl bg-black w-fit mx-auto">
+                  Mint NFT
+                </button>
               </Link>
             </div>
           )}

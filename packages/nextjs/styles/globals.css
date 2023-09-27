@@ -117,7 +117,7 @@ input {
   background: linear-gradient(115deg, #c4ff04, #c4ff04, #f0e, #f0e, #c4ff04);
   background-size: 50% 100%;
 }
-.rainbow-btn span {
+.rainbow-btn > span {
   position: relative;
   z-index: 2;
   padding: 0.6rem 0;
@@ -125,7 +125,8 @@ input {
   align-items: center;
   background: #111115;
   border-radius: 1rem;
-  display: block;
+  display: flex;
+  flex-grow: 1;
   justify-content: center;
   box-sizing: border-box;
   height: 100%;
