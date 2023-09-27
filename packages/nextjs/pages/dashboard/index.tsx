@@ -93,7 +93,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard__container mt-10">
       <div className=" dashboard__container-content ">
-        <div className="bg-super-dark p-8 min-h-[246px] rounded">
+        <div className="bg-super-dark p-4 md:p-8 min-h-[246px] rounded">
           <p className="text-xl">Account</p>
           <div className="mt-8 px-3">
             <div className="grid grid-flow-col justify-start gap-4 mb-6">
@@ -146,7 +146,7 @@ const Dashboard = () => {
       </div>
       <div>
         <div className="mt-8 rounded bg-super-dark ">
-          <div className="grid sm:grid-cols-2 ">
+          <div className="grid grid-cols-2 ">
             <button
               className={`text-center py-8 border-b-[3px]  ${
                 activeTab === "my tokens" ? "border-b-[3px] border-super-gradient" : "border-[#ffffff90]"
@@ -165,7 +165,7 @@ const Dashboard = () => {
             </button>
           </div>
 
-          <div className="min-h-[485px]">
+          <div className="min-h-[485px] p-2">
             {activeTab === "my tokens" ? (
               <div>
                 {activeTokenMainAccount && !isError && accountBalance && (
@@ -182,13 +182,12 @@ const Dashboard = () => {
                   </div>
                 )}
                 {!isLoadingBalance && !accountBalance && (
-                  <div className="grid justify-center  items-center  min-h-[480px] ">
+                  <div className="grid justify-center  items-center  min-h-[480px] p-3 ">
                     <div className="grid gap-8 text-center justify-center">
                       <p className="text-[1.2rem] md:text-[1.8rem]">You don’t have any funds on this account</p>
                       <Link href="/dashboard/deposit">
-                        <button className="px-12 py-5 border-[1px] border-super-gradient rounded-2xl bg-black w-fit mx-auto">
-                          {" "}
-                          Deposit
+                        <button className="rainbow-btn px-12 py-5 rounded-2xl w-fit mx-auto">
+                          <span> Deposit</span>
                         </button>
                       </Link>
                     </div>
@@ -196,7 +195,9 @@ const Dashboard = () => {
                 )}
               </div>
             ) : (
-              <div className="flex items-center justify-center min-h-[280px]">Coming soon...</div>
+              <div className="flex items-center justify-center min-h-[280px]">
+                <p>Coming soon...</p>
+              </div>
             )}
           </div>
         </div>

@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Bars3Icon, MagnifyingGlassIcon, SparklesIcon, ViewColumnsIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, ChartBarIcon, HomeIcon, SparklesIcon, ViewColumnsIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
@@ -37,7 +37,10 @@ const HomeHeader = () => {
   const navLinks = (
     <>
       <li>
-        <NavLink href="/">Home</NavLink>
+        <NavLink href="/">
+          <HomeIcon className="h-4 w-4" />
+          Home
+        </NavLink>
       </li>
       <li>
         <NavLink href="/list">
@@ -46,15 +49,15 @@ const HomeHeader = () => {
         </NavLink>
       </li>
       <li>
-        <NavLink href="/dashboard">
+        <NavLink href="/mint">
           <SparklesIcon className="h-4 w-4" />
-          Dashboard
+          Mint NFT
         </NavLink>
       </li>
       <li>
-        <NavLink href="/blockexplorer">
-          <MagnifyingGlassIcon className="h-4 w-4" />
-          Block Explorer
+        <NavLink href="/dashboard">
+          <ChartBarIcon className="h-4 w-4" />
+          Dashboard
         </NavLink>
       </li>
     </>
