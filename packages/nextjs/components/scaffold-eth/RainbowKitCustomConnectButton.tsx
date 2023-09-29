@@ -24,8 +24,12 @@ export const RainbowKitCustomConnectButton = () => {
             {(() => {
               if (!connected) {
                 return (
-                  <button className="btn  btn-primary btn-sm" onClick={openConnectModal} type="button">
-                    Connect Wallet
+                  <button
+                    className="btn  btn-primary btn-sm rainbow-btn small w-[5rem]"
+                    onClick={openConnectModal}
+                    type="button"
+                  >
+                    <span> Connect Wallet</span>
                   </button>
                 );
               }
@@ -37,7 +41,7 @@ export const RainbowKitCustomConnectButton = () => {
                       <span>Wrong network</span>
                       <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
                     </label>
-                    <ul tabIndex={0} className="dropdown-content menu p-2 mt-1 shadow-lg bg-base-100 rounded-box">
+                    <ul tabIndex={0} className="dropdown-content menu p-2 mt-1 shadow-lg bg-primary rounded-box">
                       <li>
                         <button
                           className="menu-item"
@@ -72,12 +76,14 @@ export const RainbowKitCustomConnectButton = () => {
                     <button
                       onClick={openAccountModal}
                       type="button"
-                      className="btn btn-secondary btn-sm pl-0 pr-2 shadow-md"
+                      className="btn-secondary btn pl-0 pr-2 shadow-md rainbow-btn "
                     >
-                      <BlockieAvatar address={account.address} size={24} ensImage={account.ensAvatar} />
-                      <span className="ml-2 mr-1">{account.displayName}</span>
                       <span>
-                        <ChevronDownIcon className="h-6 w-4" />
+                        <BlockieAvatar address={account.address} size={24} ensImage={account.ensAvatar} />
+                        <span className="ml-2 mr-1">{account.displayName}</span>
+                        <span>
+                          <ChevronDownIcon className="h-6 w-4" />
+                        </span>
                       </span>
                     </button>
                   </div>

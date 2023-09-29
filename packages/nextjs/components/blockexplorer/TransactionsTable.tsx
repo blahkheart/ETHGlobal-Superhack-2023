@@ -9,7 +9,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
 
   return (
     <div className=" justify-center">
-      <table className="table table-zebra w-full shadow-lg">
+      <table className="table bg-primary w-full shadow-lg">
         <thead>
           <tr>
             <th className="bg-primary">Transaction Hash</th>
@@ -24,7 +24,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
         {isLoading ? (
           <tbody>
             {[...Array(20)].map((_, rowIndex) => (
-              <tr key={rowIndex} className="bg-base-200 hover:bg-base-300 transition-colors duration-200 h-12">
+              <tr key={rowIndex} className="bg-[#ffffff10] hover:bg-[#ffffff10] transition-colors duration-200 h-12">
                 {[...Array(7)].map((_, colIndex) => (
                   <td className="w-1/12" key={colIndex}>
                     <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>

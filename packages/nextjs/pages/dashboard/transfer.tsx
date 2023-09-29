@@ -13,7 +13,6 @@ import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { getEthersSigner } from "~~/utils/scaffold-eth/ethersSigner";
 
-
 const Transfer = () => {
   const [activeTab, setActiveTab] = useState("sell");
   const [isTxnLoading, setIsTxnLoading] = useState(false);
@@ -101,8 +100,8 @@ const Transfer = () => {
   }
 
   return (
-    <section className="py-16 flex">
-      <div className="bg-[#1F1E27] rounded-md w-1/2">
+    <section className="py-16 flex flex-col md:flex-row">
+      <div className="bg-[#1F1E27] rounded-md md:w-1/2">
         <div className="flex mb-4 border-b border-[#ffffff90]">
           <button
             className={`text-xl font-semibold cursor-pointer flex items-center justify-center w-1/2 p-6 ${
@@ -299,7 +298,7 @@ const Transfer = () => {
         </div>
       </div>
 
-      <div className="bg-[#1F1E27] rounded-md w-1/2 ml-[1rem]">
+      <div className="bg-[#1F1E27] rounded-md md:w-1/2 md:ml-[1rem] mt-10 md:mt-0">
         <div className="flex mb-4 border-b border-[#ffffff90]">
           <p className={`text-xl font-semibold cursor-pointer flex items-center justify-center w-full p-6`}>
             Collections

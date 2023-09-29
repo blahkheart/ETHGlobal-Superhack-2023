@@ -19,7 +19,7 @@ const Deposit = () => {
     <div className=" mt-28  deposit__container  h-full">
       <div className="grid  gap-8 deposit__container-content min-h-[37.7rem]">
         <div className="bg-super-dark p-10 text-center rounded-lg ">
-          <h3 className="text-[27px] mb-4">Depost</h3>
+          <h3 className="text-[27px] mb-4">Deposit</h3>
           <SelectActiveToken nbaCollectibles={NBACollectibles} type="address" />
           <p className="mb-8 mt-4 gradient-text">(Onchain Transfer)</p>
           <p>Send ETH, ERC20 tokens or NFTs to this address:</p>

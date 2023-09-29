@@ -221,7 +221,7 @@ const Dashboard = () => {
                   const val = e.target.value;
                   setImplementation(val);
                 }}
-                className="input input-bordered input-sm w-full bg-transparent"
+                className="input input-bordered input-sm w-full h-10 bg-transparent"
               />
             </div>
             <div className="mt-0 text-[#a2aab6] w-full">
@@ -233,7 +233,7 @@ const Dashboard = () => {
                   const val = e.target.value;
                   setChainId(val);
                 }}
-                className="input input-bordered focus:outline-none focus:bg-transparent focus:text-gray-400 input-sm w-full bg-transparent"
+                className="input input-bordered focus:outline-none focus:bg-transparent focus:text-gray-400 input-sm h-10 w-full bg-transparent"
               />
             </div>
             <div className="mt-0 text-[#a2aab6] w-full">
@@ -245,7 +245,7 @@ const Dashboard = () => {
                   setTokenContract(val);
                 }}
                 placeholder="Token contract address"
-                className="input input-bordered focus:outline-none focus:bg-transparent focus:text-gray-400 input-sm w-full bg-transparent"
+                className="input input-bordered focus:outline-none focus:bg-transparent focus:text-gray-400 input-sm h-10 w-full bg-transparent"
               />
             </div>
             <div className="mt-0 text-[#a2aab6] w-full">
@@ -256,7 +256,7 @@ const Dashboard = () => {
                   const val = e.target.value;
                   setTokenId(val);
                 }}
-                className="input input-bordered focus:outline-none focus:bg-transparent focus:text-gray-400 input-sm w-full bg-transparent"
+                className="input input-bordered focus:outline-none focus:bg-transparent focus:text-gray-400 input-sm h-10 w-full bg-transparent"
               />
             </div>
             <div className="mt-0 text-[#a2aab6] w-full">
@@ -286,13 +286,13 @@ const Dashboard = () => {
                       const val = e.target.value;
                       setSalt(val);
                     }}
-                    className="input input-bordered input-sm focus:outline-none focus:bg-transparent focus:text-gray-400 input-sm w-full bg-transparent"
+                    className="input input-bordered input-sm focus:outline-none focus:bg-transparent focus:text-gray-400 w-full bg-transparent"
                   />
                 </label>
               </div>
             </div>
-            <button onClick={createAccount} className="hover:bg-black border-b-2 rounded-2xl p-3">
-              Create account
+            <button onClick={createAccount} className="hover:bg-black rounded-2xl p-3 rainbow-btn">
+              <span> Create account</span>
             </button>
           </div>
         </BaseModal>

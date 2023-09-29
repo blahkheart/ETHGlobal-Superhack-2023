@@ -8,15 +8,7 @@ const List: NextPage = () => {
     <main className="bg-[#221e29]">
       <MetaHeader />
       <HomeHeader />
-      <section
-        className="bg-contain bg-bottom mt-16 pb-16"
-        style={{
-          background: `url("/assets/bg1.png")`,
-          backgroundPositionY: "bottom",
-          backgroundSize: "contain",
-          backgroundPositionX: "center",
-        }}
-      >
+      <section className=" bg-bottom mt-16 pb-16">
         <MyCollectibles imageWidth={250} imageHeight={200} displayMainAccount={false} />
       </section>
     </main>
